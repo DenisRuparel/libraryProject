@@ -25,6 +25,16 @@
       </div>
     </div>
 
+
+    $query = "SELECT * FROM settings";
+    $query_run = mysqli_query($connection, $query);
+
+    foreach($query_run as $row){
+      $book_issue_limit = $row["library_issue_total_book_per_user"];
+
+      $total_book_issue_day = $row["library_total_book_issue_day"];
+    }
+
 <!-- Earnings (Monthly) Card Example -->
     <!-- <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-info shadow h-100 py-2">
@@ -69,3 +79,67 @@
       </div>
     </div>
   </div>
+
+<?php
+$errors = array();
+$success = array();
+// $rdate = date("d/m/Y", strtotime("+15 days"));
+if(isset($_POST["issue_book_button"])){
+  $book_id = $_POST['book_id'];
+  $user_id = $_POST['user_id'];
+
+  if(empty($_POST["book_id"])){
+      $errors['b-id'] = 'Book ID is required!';
+  }
+
+  if(empty($_POST["user_id"])){
+      $errors['u-id'] = 'Student Enrollment Number is required!';
+  }
+
+  if(empty($_POST["book_id"]) || empty($_POST["user_id"])){
+      $errors['boru-id'] = 'Empty Fields Fill it!';
+  }
+
+  if($errors == ''){
+
+    $book_issue_limit = get_book_issue_limit_per_user($connection);
+
+    $total_book_issue = get_total_book_issue_per_user($connection, $user_id);
+
+    if($total_book_issue < $book_issue_limit){
+      $total_book_issue_day = get_total_book_issue_day($connection);
+
+      $today_date = get_date_time($connection);
+
+      $expected_return_date = date('Y-m-d H:i:s', strtotime($today_date. ' + '.$total_book_issue_day.' days'));
+
+      $insert_query = "INSERT INTO issue_book 
+                      enrollment_number, book_id, issue_date, return_date, book_issue_status) 
+                      VALUES ('$user_id', '$book_id', '$today_date', '$expected_return_date', 'Issue')";
+
+                      $insert_query_run = mysqli_query($connection, $insert_query);
+
+                      if ($insert_query_run) {
+                        $success['issuebook'] = "Book Issued Successsfully!";
+                      }
+                      else {
+                        $errors['issue-error'] = "Failed To Issue Book!";
+                      }
+
+                      $update_query = "UPDATE books SET quantity = quantity - 1, 
+                                      book_updated_on = '$today_date' WHERE book_id = '$book_id'";
+
+                      $update_query_run = mysqli_query($connection, $update_query);
+
+                      header('location:issue_book.php?msg=add');
+      }
+      else{
+        $errors['r-book'] = 'User has already reached Book Issue Limit, First return pending book!';
+      }
+    }
+    else{
+      $errors['err'] = 'Some Error Occured!';
+    }
+  }
+
+?>
