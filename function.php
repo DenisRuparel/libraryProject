@@ -43,7 +43,7 @@ include('database/dbconfig.php');
     function get_total_book_issue_per_user($connection, $user_unique_id){
         $output = 0;
         $query = "SELECT COUNT(issue_book_id) AS Total FROM issue_book 
-        WHERE enrollment_number = '$user_unique_id' 
+        WHERE user_id = '$user_unique_id' 
         AND book_issue_status = 'Issue'";
 
         // $result = $connection->query($query);

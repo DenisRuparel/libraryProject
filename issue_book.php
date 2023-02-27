@@ -62,8 +62,8 @@ if(isset($_POST["issue_book_button"])){
 
                           $update_query_run = mysqli_query($connection, $update_query);
 
-                          // echo "<script>window.location.href='issue_book.php';</script>";
-                          header("location:'issue_book.php'");
+                          echo "<script>window.location.href='issue_book.php';</script>";
+                          // header("location:'issue_book.php'");
           }
           else{
             $errors['r-book'] = 'User has already reached Book Issue Limit, First return pending book!';
