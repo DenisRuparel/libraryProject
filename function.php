@@ -56,7 +56,6 @@ include('database/dbconfig.php');
     }
 
     function get_date_time($connection){
-
         return date("Y-m-d H:i:s",  STRTOTIME(date('h:i:sa')));
     }
 ?>

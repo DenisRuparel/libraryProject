@@ -7,7 +7,7 @@ include('function.php');
 
 ?>
 <?php
-$errors = array();
+$errors = NULL;
 $success = array();
 // $rdate = date("d/m/Y", strtotime("+15 days"));
 if(isset($_POST["issue_book_button"])){
@@ -26,42 +26,48 @@ if(isset($_POST["issue_book_button"])){
         $errors['boru-id'] = 'Empty Fields Fill it!';
     }
 
-    if($errors == ''){
+    if($errors == NULL){
+        $book_issue_limit = get_book_issue_limit_per_user($connection);
 
-      $book_issue_limit = get_book_issue_limit_per_user($connection);
+        $total_book_issue = get_total_book_issue_per_user($connection, $user_id);
 
-      $total_book_issue = get_total_book_issue_per_user($connection, $user_id);
+        if($total_book_issue < $book_issue_limit){
+          $total_book_issue_day = get_total_book_issue_day($connection);
 
-      if($total_book_issue < $book_issue_limit){
-        $total_book_issue_day = get_total_book_issue_day($connection);
+          $today_date = get_date_time($connection);
 
-        $today_date = get_date_time($connection);
+          $expected_return_date = date('Y-m-d H:i:s', strtotime($today_date. ' + '.$total_book_issue_day.' days'));
 
-        $expected_return_date = date('Y-m-d H:i:s', strtotime($today_date. ' + '.$total_book_issue_day.' days'));
+          $insert_query = "INSERT INTO issue_book 
+                          (book_id, user_id, issue_date_time, expected_return_date, book_issue_status) 
+                          VALUES ('$book_id', '$user_id', '$today_date', '$expected_return_date', 'Issue')";
 
-        $insert_query = "INSERT INTO issue_book 
-                        (book_id, user_id, issue_date_time, expected_return_date, book_issue_status) 
-                        VALUES ('$book_id', '$user_id', '$today_date', '$expected_return_date', 'Issue')";
+                          $insert_query_run = mysqli_query($connection, $insert_query);
 
-                        $insert_query_run = mysqli_query($connection, $insert_query);
+                          if ($insert_query_run) {
+                            // $success['issuebook'] = "Book Issued Successsfully!";
+                            echo '<div class="alert alert-success" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                  <span aria-hidden="true">×</span>
+                                </button>
+                                  <span class="text-success">Book Issued Successsfully!</span>
+                                </div>';
+                          }
+                          else {
+                            $errors['issue-error'] = "Failed To Issue Book!";
+                          }
 
-                        if ($insert_query_run) {
-                          $success['issuebook'] = "Book Issued Successsfully!";
-                        }
-                        else {
-                          $errors['issue-error'] = "Failed To Issue Book!";
-                        }
+                          $update_query = "UPDATE books SET quantity = quantity - 1, 
+                                          book_updated_on = '$today_date' WHERE book_id = '$book_id'";
 
-                        $update_query = "UPDATE books SET quantity = quantity - 1, 
-                                        book_updated_on = '$today_date' WHERE book_id = '$book_id'";
+                          $update_query_run = mysqli_query($connection, $update_query);
 
-                        $update_query_run = mysqli_query($connection, $update_query);
-
-                        header('location:issue_book.php?msg=add');
-        }
-        else{
-          $errors['r-book'] = 'User has already reached Book Issue Limit, First return pending book!';
-        }
+                          // echo "<script>window.location.href='issue_book.php';</script>";
+                          header("location:'issue_book.php'");
+          }
+          else{
+            $errors['r-book'] = 'User has already reached Book Issue Limit, First return pending book!';
+          }
       }
       else{
         $errors['err'] = 'Some Error Occured!';
@@ -76,7 +82,7 @@ if(isset($_POST["issue_book_button"])){
     </div>
 
     <?php
-        if(count($errors) == 1){
+        if($errors == 1){
       ?>
     <div class="alert alert-danger text-center">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -90,7 +96,7 @@ if(isset($_POST["issue_book_button"])){
     </div>
     <?php
       }
-      elseif(count($errors) > 1){
+      elseif($errors > 1){
           ?>
     <div class="alert alert-danger">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -108,24 +114,26 @@ if(isset($_POST["issue_book_button"])){
     </div>
     <?php
       }
-      elseif(count($success) == 1){
+      // elseif(count($success) == 1){
         ?>
-    <div class="alert alert-success">
+    <!-- <div class="alert alert-success">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">×</span>
-      </button>
+      </button> -->
       <?php
-        foreach($success as $showsuccess){
+        // foreach($success as $showsuccess){
           ?>
-      <li>
-        <?php echo $showsuccess; ?>
-      </li>
+      <!-- <li> -->
+        <?php 
+          // echo $showsuccess; 
+          ?>
+      <!-- </li> -->
       <?php
-        }
+        // }
           ?>
-    </div>
+    <!-- </div> -->
     <?php
-    }
+    // }
       ?>
 
     <div class="card-body">
@@ -163,11 +171,12 @@ if(isset($_POST["issue_book_button"])){
             }).then(function (response) {
               return response.json();
             }).then(function (responseData) {
-              var html = '<div class="list-group" style="position:absolute; width:93%">';
+              var html = '<div class="list-group" style="position:absolute; width:97%">';
 
               if (responseData.length > 0) {
                 for (var count = 0; count < responseData.length; count++) {
-                  html += '<a href="#" class="list-group-item list-group-item-action"><span onclick="get_text(this)">' + responseData[count].id + ' - ' + responseData[count].book_title + '</span></a>';
+                  // html += '<a href="#" class="list-group-item list-group-item-action"><span onclick="get_text(this)">' + responseData[count].id + ' - ' + responseData[count].book_title + '</span></a>';
+                  html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this)">' + responseData[count].id + ' - ' + responseData[count].book_title + '</a>';
                 }
               }
               else {
@@ -206,11 +215,12 @@ if(isset($_POST["issue_book_button"])){
             }).then(function (response) {
               return response.json();
             }).then(function (responseData) {
-              var html = '<div class="list-group" style="position:absolute; width:93%">';
+              var html = '<div class="list-group" style="position:absolute; width:97%">';
 
               if (responseData.length > 0) {
                 for (var count = 0; count < responseData.length; count++) {
-                  html += '<span onclick="get_text1(this)"><a href="#" class="list-group-item list-group-item-action">' + responseData[count].enrollment_number + ' - ' + responseData[count].first_name + ' ' + responseData[count].last_name + '</span></a>';
+                  // html += '<span onclick="get_text1(this)"><a href="#" class="list-group-item list-group-item-action">' + responseData[count].enrollment_number + ' - ' + responseData[count].first_name + ' ' + responseData[count].last_name + '</span></a>';
+                  html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text1(this)">' + responseData[count].enrollment_number + ' - ' + responseData[count].first_name + ' ' + responseData[count].last_name + '</a>';
                 }
               }
               else {

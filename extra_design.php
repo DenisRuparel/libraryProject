@@ -142,4 +142,56 @@ if(isset($_POST["issue_book_button"])){
     }
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // -------------------------------------------------------------------------------------------------------------
+  $book_issue_limit = get_book_issue_limit_per_user($connection);
+
+      $total_book_issue = get_total_book_issue_per_user($connection, $user_id);
+
+      if($total_book_issue < $book_issue_limit){
+        $total_book_issue_day = get_total_book_issue_day($connection);
+
+        $today_date = get_date_time($connection);
+
+        $expected_return_date = date('Y-m-d H:i:s', strtotime($today_date. ' + '.$total_book_issue_day.' days'));
+
+        $insert_query = "INSERT INTO issue_book 
+                        (book_id, user_id, issue_date_time, expected_return_date, book_issue_status) 
+                        VALUES ('$book_id', '$user_id', '$today_date', '$expected_return_date', 'Issue')";
+
+                        $insert_query_run = mysqli_query($connection, $insert_query);
+
+                        if ($insert_query_run) {
+                          $success['issuebook'] = "Book Issued Successsfully!";
+                        }
+                        else {
+                          $errors['issue-error'] = "Failed To Issue Book!";
+                        }
+
+                        $update_query = "UPDATE books SET quantity = quantity - 1, 
+                                        book_updated_on = '$today_date' WHERE book_id = '$book_id'";
+
+                        $update_query_run = mysqli_query($connection, $update_query);
+
+                        header('location:issue_book.php?msg=add');
+                      }
 ?>
