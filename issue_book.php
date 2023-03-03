@@ -27,51 +27,56 @@ if(isset($_POST["issue_book_button"])){
     }
 
     if($errors == NULL){
-        $book_issue_limit = get_book_issue_limit_per_user($connection);
+      $query = "SELECT * FROM books WHERE book_id = '$book_id'";
 
-        $total_book_issue = get_total_book_issue_per_user($connection, $user_id);
+      $query_run= mysqli_query($connection, $query);
 
-        if($total_book_issue < $book_issue_limit){
-          $total_book_issue_day = get_total_book_issue_day($connection);
+      if(mysqli_num_rows($query_run) > 0){
 
-          $today_date = get_date_time($connection);
+        foreach($query_run as $book_row){
+        
+          if($book_row['availability'] == 'Available' && $book_row['quantity'] > 0){
+        
+            $book_issue_limit = get_book_issue_limit_per_user($connection);
 
-          $expected_return_date = date('Y-m-d H:i:s', strtotime($today_date. ' + '.$total_book_issue_day.' days'));
+            $total_book_issue = get_total_book_issue_per_user($connection, $user_id);
 
-          $insert_query = "INSERT INTO issue_book 
-                          (book_id, user_id, issue_date_time, expected_return_date, book_issue_status) 
-                          VALUES ('$book_id', '$user_id', '$today_date', '$expected_return_date', 'Issue')";
+            if($total_book_issue < $book_issue_limit){
+              $total_book_issue_day = get_total_book_issue_day($connection);
 
-                          $insert_query_run = mysqli_query($connection, $insert_query);
+              $today_date = get_date_time($connection);
 
-                          if ($insert_query_run) {
-                            // $success['issuebook'] = "Book Issued Successsfully!";
-                            echo '<div class="alert alert-success" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                  <span aria-hidden="true">×</span>
-                                </button>
-                                  <span class="text-success">Book Issued Successsfully!</span>
-                                </div>';
-                          }
-                          else {
-                            $errors['issue-error'] = "Failed To Issue Book!";
-                          }
+              $expected_return_date = date('Y-m-d H:i:s', strtotime($today_date. ' + '.$total_book_issue_day.' days'));
 
-                          $update_query = "UPDATE books SET quantity = quantity - 1, 
-                                          book_updated_on = '$today_date' WHERE book_id = '$book_id'";
+              $insert_query = "INSERT INTO issue_book 
+                              (book_id, user_id, issue_date_time, expected_return_date, book_issue_status) 
+                              VALUES ('$book_id', '$user_id', '$today_date', '$expected_return_date', 'Issue')";
 
-                          $update_query_run = mysqli_query($connection, $update_query);
+                              $insert_query_run = mysqli_query($connection, $insert_query);
 
-                          echo "<script>window.location.href='issue_book.php';</script>";
-                          // header("location:'issue_book.php'");
+                              $update_query = "UPDATE books SET quantity = quantity - 1, 
+                                              book_updated_on = '$today_date' WHERE book_id = '$book_id'";
+
+                              $update_query_run = mysqli_query($connection, $update_query);
+
+                              echo "<script>window.location.href='issue_book.php?msg=add';</script>";
+              }
+              else{
+                $errors['r-book'] = 'User has already reached Book Issue Limit, First return pending book!';
+              }
           }
           else{
-            $errors['r-book'] = 'User has already reached Book Issue Limit, First return pending book!';
+            $errors['booknotavailable'] = 'Book not Available!';
           }
+        }
       }
       else{
-        $errors['err'] = 'Some Error Occured!';
+        $errors['booknotfound'] = 'Book not Found!';
       }
+    }
+    else{
+      $errors['err'] = 'Some Error Occured!';
+    }
 }
 ?>
 <div class="container-fluid">
@@ -114,27 +119,19 @@ if(isset($_POST["issue_book_button"])){
     </div>
     <?php
       }
-      // elseif(count($success) == 1){
-        ?>
-    <!-- <div class="alert alert-success">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">×</span>
-      </button> -->
-      <?php
-        // foreach($success as $showsuccess){
-          ?>
-      <!-- <li> -->
-        <?php 
-          // echo $showsuccess; 
-          ?>
-      <!-- </li> -->
-      <?php
-        // }
-          ?>
-    <!-- </div> -->
+    ?>
     <?php
-    // }
-      ?>
+      if(isset($_GET['msg'])){
+        if($_GET['msg'] == 'add'){
+          echo '<div class="alert alert-success" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                    <span class="text-success">Book Issued Successfully!</span>
+                </div>';
+        }
+      }
+    ?>
 
     <div class="card-body">
       <form action="issue_book.php" method="POST" autocomplete="">
@@ -176,7 +173,8 @@ if(isset($_POST["issue_book_button"])){
               if (responseData.length > 0) {
                 for (var count = 0; count < responseData.length; count++) {
                   // html += '<a href="#" class="list-group-item list-group-item-action"><span onclick="get_text(this)">' + responseData[count].id + ' - ' + responseData[count].book_title + '</span></a>';
-                  html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this)">' + responseData[count].id + ' - ' + responseData[count].book_title + '</a>';
+                  html += '<a href="#" class="list-group-item list-group-item-action"><span onclick="get_text(this)">'+responseData[count].id+'</span> - <span class="text-muted">'+responseData[count].book_title+'</span></a>';
+                  // html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this)">' + responseData[count].id + ' - ' + responseData[count].book_title + '</a>';
                 }
               }
               else {
@@ -219,8 +217,7 @@ if(isset($_POST["issue_book_button"])){
 
               if (responseData.length > 0) {
                 for (var count = 0; count < responseData.length; count++) {
-                  // html += '<span onclick="get_text1(this)"><a href="#" class="list-group-item list-group-item-action">' + responseData[count].enrollment_number + ' - ' + responseData[count].first_name + ' ' + responseData[count].last_name + '</span></a>';
-                  html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text1(this)">' + responseData[count].enrollment_number + ' - ' + responseData[count].first_name + ' ' + responseData[count].last_name + '</a>';
+                  html += '<a href="#" class="list-group-item list-group-item-action"><span onclick="get_text1(this)">'+responseData[count].enrollment_number+'</span> - <span class="text-muted">'+responseData[count].first_name+' '+ responseData[count].last_name + '</span></a>';
                 }
               }
               else {
