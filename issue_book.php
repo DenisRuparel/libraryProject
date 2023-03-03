@@ -1,5 +1,4 @@
 <?php
-// session_start();
 include('admin/header.php'); 
 include('admin/navbar.php'); 
 include('security.php'); 
