@@ -79,47 +79,6 @@ if(isset($_POST["issue_book_button"])){
     }
 }
 ?>
-<div class="container-fluid">
-  <!-- DataTales Example -->
-  <div class="card shadow mb-4">
-    <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary"> Issue Book </h6>
-    </div>
-
-    <?php
-        if($errors == 1){
-      ?>
-    <div class="alert alert-danger text-center">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">×</span>
-      </button>
-      <?php
-            foreach($errors as $showerror){
-              echo $showerror;
-            }
-          ?>
-    </div>
-    <?php
-      }
-      elseif($errors > 1){
-          ?>
-    <div class="alert alert-danger">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">×</span>
-      </button>
-      <?php
-          foreach($errors as $showerror){
-            ?>
-      <li>
-        <?php echo $showerror; ?>
-      </li>
-      <?php
-          }
-            ?>
-    </div>
-    <?php
-      }
-    ?>
     <?php
       if(isset($_GET['msg'])){
         if($_GET['msg'] == 'add'){
@@ -132,7 +91,19 @@ if(isset($_POST["issue_book_button"])){
         }
       }
     ?>
+<?php 
 
+if(isset($_GET["action"]))
+{
+    if($_GET["action"] == 'add')
+    {
+?>
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary"> Issue Book </h6>
+    </div>
     <div class="card-body">
       <form action="issue_book.php" method="POST" autocomplete="">
         <div class="mb-3">
@@ -245,7 +216,267 @@ if(isset($_POST["issue_book_button"])){
 </div>
 
 </div>
+<?php 
+  }
+        else if($_GET["action"] == 'view'){
+            $issue_book_id = convert_data($_GET["code"], 'decrypt');
 
+            if($issue_book_id > 0){
+                $query = "SELECT * FROM issue_book 
+                WHERE issue_book_id = '$issue_book_id'";
+
+                $result = mysqli_query($connection, $query);
+
+                foreach($result as $row){
+                    $query = "SELECT * FROM books 
+                    WHERE book_id = '".$row["book_id"]."' ";
+
+                    $book_result = mysqli_query($connection, $query);
+
+                    $query = "SELECT * FROM register 
+                    WHERE enrollment_number = '".$row["user_id"]."'";
+
+                    $user_result = mysqli_query($connection, $query);
+
+                    if($errors != ''){
+                        echo '<div class="alert alert-danger">'.$errors.'</div>';
+                    }
+
+                    foreach($book_result as $book_data){
+                        echo '
+                        <div class="container-fluid">
+                          <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                              <h4 class="m-0 font-weight-bold text-primary"> Book Details </h4>
+                              <table class="table table-bordered">
+                                  <tr>
+                                      <th width="30%">Book ID</th>
+                                      <td width="70%">'.$book_data["book_id"].'</td>
+                                  </tr>
+                                  <tr>
+                                      <th width="30%">Book Title</th>
+                                      <td width="70%">'.$book_data["book_title"].'</td>
+                                  </tr>
+                                  <tr>
+                                      <th width="30%">Author</th>
+                                      <td width="70%">'.$book_data["author_name"].'</td>
+                                  </tr>
+                              </table>
+                              </div>
+                            </div>
+                          </div>
+                        ';
+                    }
+
+                    foreach($user_result as $user_data)
+                    {
+                        echo '
+                        <div class="container-fluid">
+                          <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                              <h4 class="m-0 font-weight-bold text-primary"> User Details </h4>
+                              <table class="table table-bordered">
+                                  <tr>
+                                      <th width="30%">Enrollment Number</th>
+                                      <td width="70%">'.$user_data["enrollment_number"].'</td>
+                                  </tr>
+                                  <tr>
+                                      <th width="30%">Full Name</th>
+                                      <td width="70%">'.$user_data["first_name"].' '.$user_data["last_name"].'</td>
+                                  </tr>
+                                  <tr>
+                                      <th width="30%">Contact No.</th>
+                                      <td width="70%">'.$user_data["contact"].'</td>
+                                  </tr>
+                                  <tr>
+                                      <th width="30%">Email Address</th>
+                                      <td width="70%">'.$user_data["email"].'</td>
+                                  </tr>
+                              </table>
+                              </div>
+                            </div>
+                          </div>
+                        ';
+                    }
+
+                    $status = $row["book_issue_status"];
+
+                    $form_item = '';
+
+                    if($status == "Issue")
+                    {
+                        $status = '<h5><span class="badge badge-success">Issue</span></h5>';
+
+                        $form_item = '
+                        <label><input type="checkbox" name="book_return_confirmation" value="Yes" /> I aknowledge that I have received Issued Book</label>
+                        <br />
+                        <div class="mt-4 mb-4">
+                            <input type="submit" name="book_return_button" value="Book Return" class="btn btn-primary" />
+                        </div>
+                        ';
+                    }
+
+                    if($status == 'Not Return')
+                    {
+                        $status = '<h5><span class="badge badge-danger">Not Return</span></h5>';
+
+                        $form_item = '
+                        <label><input type="checkbox" name="book_return_confirmation" value="Yes" /> I aknowledge that I have received Issued Book</label><br />
+                        <div class="mt-4 mb-4">
+                            <input type="submit" name="book_return_button" value="Book Return" class="btn btn-primary" />
+                        </div>
+                        ';
+                    }
+
+                    if($status == 'Return')
+                    {
+                        $status = '<h5><span class="badge badge-warning">Return</span></h5>';
+                    }
+
+                    echo '
+                    <div class="container-fluid">
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h4 class="m-0 font-weight-bold text-primary"> Issue Book Details </h4>
+                          <table class="table table-bordered">
+                              <tr>
+                                  <th width="30%">Book Issue Date</th>
+                                  <td width="70%">'.$row["issue_date_time"].'</td>
+                              </tr>
+                              <tr>
+                                  <th width="30%">Book Return Date</th>
+                                  <td width="70%">'.$row["expected_return_date"].'</td>
+                              </tr>
+                              <tr>
+                                  <th width="30%">Book Issue Status</th>
+                                  <td width="70%">'.$status.'</td>
+                              </tr>
+                          </table>
+                          <form method="POST">
+                              <input type="hidden" name="issue_book_id" value="'.$issue_book_id.'" />
+                              <input type="hidden" name="book_id" value="'.$row["book_id"].'" />
+                              '.$form_item.'
+                          </form>
+                          </div>
+                        </div>
+                      </div>
+                    ';
+
+                }
+            }
+        }
+}
+else{
+?>
+<div class="container-fluid">
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Issue Book &nbsp;
+            <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addbook">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+              Add
+            </button> -->
+            <a href="issue_book.php?action=add" class="btn btn-primary">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+              Add
+            </a>
+            <?php
+              if(isset($_SESSION['success']) && $_SESSION['success'] != ''){
+                  // echo '<h4 class="bg-primary"> '.$_SESSION['success'].' </h4>';
+                  echo '<div class="alert alert-success" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                      <span class="text-success">'.$_SESSION['success'].'</span>
+                    </div>';
+                  unset($_SESSION['success']);
+              }
+
+              if(isset($_SESSION['status']) && $_SESSION['status'] != ''){
+                  // echo '<h4 class="bg-danger"> '.$_SESSION['status'].' </h4>';
+                  echo '<div class="alert alert-success" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                      <span class="text-success">'.$_SESSION['status'].'</span>
+                    </div>';
+                  unset($_SESSION['status']);
+              }
+            ?>
+    </h6>
+    
+  </div>
+  <div class="card-body">
+
+    <div class="table-responsive">
+      <table class="table table-bordered" id="datatableid" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th> Book Id </th>
+            <th> Enrollment Number </th>
+            <th> Book Issue Date</th>
+            <th> Book Return Date</th>
+            <th> Book Status</th>
+            <th> Action</th>
+            <!-- <th>EDIT </th>
+            <th>DELETE </th> -->
+          </tr>
+        </thead>
+        <tbody>
+        <?php
+        $query = "SELECT * FROM issue_book";
+        $query_run = mysqli_query($connection, $query);
+        if(mysqli_num_rows($query_run) > 0){
+          while($row = mysqli_fetch_assoc($query_run)){
+            $status = $row["book_issue_status"];
+						
+            if($status == 'Issue'){
+							$status = '<h5><span class="badge badge-success">Issue</span></h5>';
+						}
+
+						if($status == 'Not Return'){
+							$status = '<h5><span class="badge badge-danger">Not Return</span></h5>';
+						}
+
+						if($status == 'Return'){
+							$status = '<h5><span class="badge badge-warning">Return</span></h5>';
+						}
+          ?>
+            <tr>
+            <td><?php  echo $row['book_id']; ?></td>
+            <td><?php  echo $row['user_id']; ?></td>
+            <td><?php  echo $row['issue_date_time']; ?></td>
+            <td><?php  echo $row['expected_return_date']; ?></td>
+            <td><?php  echo $status; ?></td>
+            <td>
+            <?php
+              echo'
+              <a href="issue_book.php?action=view&code='.convert_data($row["issue_book_id"]).'" class="btn btn-primary">
+                View
+              </a>'
+            ?>
+            </td>
+            </tr>
+          <?php
+          } 
+        }
+        else{
+          echo "No Record Found";
+        }
+          ?>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+</div>
+      <?php
+        }
+      ?>
 <?php
 // include('admin/scripts.php');
 include('admin/footer.php');

@@ -9,92 +9,28 @@ include('security.php');
 
 $errors = array();
 $success = array();
-if(isset($_POST['savebtn'])){
-  $enrollment_number = $_POST['enrollment_number'];
-  // $book_id= $_POST['book_id'];
-  // $book_title=$_POST['book_title'];
-  // $book_issue_date = $_POST['book_issue_date'];
-  // $book_return_date = $_POST['book_return_date'];
-
-
-  $bookid_query = "SELECT * FROM issue_book WHERE enrollment_number='$enrollment_number' ";
-  $bookid_query_run = mysqli_query($connection, $bookid_query);
-  if(mysqli_num_rows($bookid_query_run) > 0){ 
-      $errors['enrollment_number'] = "Enrollment Number that you have entered is already exist!";
-  }
-
-  if(count($errors) === 0){
-      $query = "INSERT INTO issue_book(enrollment_number,book_id,book_title,book_issue_date,book_return_date) VALUES ('$enrollment_number','$book_id','$book_title','$book_issue_date','$book_return_date')";
-      $query_run = mysqli_query($connection, $query);
-      
-      if($query_run){
-          $success['addbook'] = "Book issue Successsfully!";
-      }
-      else{
-          $errors['add-error'] = "Failed To issue Book !";
-      }
-  }
-}
 ?>
-<!-- <div class="container-fluid">
+<?php
+  if ($_GET["action"] == 'view') {
+    echo 'hello';
+  }
+?>
 
-
-<div class="card shadow mb-4">
-  <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">issue books : </h6> -->
-    <div class="modal fade" id="addbook" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="ModalLabel">issue Book Record :</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form action="issue_book_admin.php" method="POST" autocomplete="">
-
-        <div class="modal-body">
-
-            <div class="form-group">
-                <label> Enrollment Number </label>
-                <input type="number" name="enrollment_number" class="form-control" placeholder="Enter Enrollment Number " required>
-            </div>
-            <div class="form-group">
-                <label>Book Id </label>
-                <input type="text" name="book_id" class="form-control" placeholder="Enter Book Id" required>
-            </div>
-            <div class="form-group">
-                <label>Book Title </label>
-                <input type="text" name="book_title" class="form-control" placeholder="Enter Book Title" required>
-            </div>
-            <div class="form-group">
-                <label>Book Issue date</label>
-                <input type="date" name="book_issue_date" class="form-control" placeholder="Enter Book Issue Date" required>
-            </div>
-            <div class="form-group">
-                <label>Book Return Date</label>
-                <input type="date" name="book_return_date" class="form-control" placeholder="Enter Book Return Date" required>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" name="savebtn" class="btn btn-primary">Save</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
 
 <div class="container-fluid">
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Issue Book Records: &nbsp;
+    <h6 class="m-0 font-weight-bold text-primary">Issue Book &nbsp;
             <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addbook">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
-              Issue
+              Add
             </button> -->
+            <a href="issue_book.php?action=add" class="btn btn-primary">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+              Add
+            </a>
             <?php
               if(isset($_SESSION['success']) && $_SESSION['success'] != ''){
                   // echo '<h4 class="bg-primary"> '.$_SESSION['success'].' </h4>';
@@ -118,8 +54,8 @@ if(isset($_POST['savebtn'])){
                   unset($_SESSION['status']);
               }
             ?>
-            </h6>
- <?php
+    </h6>
+    <?php
         if(count($errors) == 1){
       ?>
         <div class="alert alert-danger text-center">
@@ -168,18 +104,20 @@ if(isset($_POST['savebtn'])){
     }
       ?>
   </div>
-
   <div class="card-body">
 
     <div class="table-responsive">
       <table class="table table-bordered" id="datatableid" width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th> Enrollment Number </th>
             <th> Book Id </th>
-            <th> Book Title </th>
+            <th> Enrollment Number </th>
             <th> Book Issue Date</th>
             <th> Book Return Date</th>
+            <th> Book Status</th>
+            <th> Action</th>
+            <!-- <th>EDIT </th>
+            <th>DELETE </th> -->
           </tr>
         </thead>
         <tbody>
@@ -188,12 +126,31 @@ if(isset($_POST['savebtn'])){
         $query_run = mysqli_query($connection, $query);
         if(mysqli_num_rows($query_run) > 0){
           while($row = mysqli_fetch_assoc($query_run)){
+            $status = $row["book_issue_status"];
+						
+            if($status == 'Issue'){
+							$status = '<h5><span class="badge badge-success">Issue</span></h5>';
+						}
+
+						if($status == 'Not Return'){
+							$status = '<h5><span class="badge badge-danger">Not Return</span></h5>';
+						}
+
+						if($status == 'Return'){
+							$status = '<h5><span class="badge badge-warning">Return</span></h5>';
+						}
           ?>
             <tr>
             <td><?php  echo $row['book_id']; ?></td>
             <td><?php  echo $row['user_id']; ?></td>
             <td><?php  echo $row['issue_date_time']; ?></td>
             <td><?php  echo $row['expected_return_date']; ?></td>
+            <td><?php  echo $status; ?></td>
+            <td>
+              <a href="issue_book.php?action=view&code='.convert_data($row["issue_book_id"]).'" class="btn btn-primary">
+                View
+              </a>
+            </td>
             </tr>
           <?php
           } 
@@ -210,4 +167,3 @@ if(isset($_POST['savebtn'])){
 </div>
 
 </div>
-

@@ -210,10 +210,10 @@ if(isset($_POST['savebtn'])){
           while($row = mysqli_fetch_assoc($query_run)){
             $availabel = '';
             if($row['availability'] == 'Available'){
-							$availabel = '<div class="badge bg-success">Availabel</div>';
+							$availabel = '<h5><span class="badge badge-success">Available</span></h5>';
 						}
 						else{
-							$availabel = '<div class="badge bg-danger">Not Availabel</div>';
+							$availabel = '<h5><span class="badge badge-danger">Not Availabel</span></h5>';
 						}
           ?>
             <tr>
