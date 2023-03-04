@@ -1,6 +1,5 @@
 <?php
-include('admin/header.php'); 
-include('admin/navbar.php'); 
+session_start(); 
 include('security.php');
 ?>
 <?php
@@ -22,37 +21,43 @@ include('security.php');
     
             $insert = "INSERT INTO register(enrollment_number, first_name, last_name, email, contact, password, activation, user_avatar, date) VALUES ('$eno','$fname','$lname','$email','$contact','$password','$activation','$avatar','$date')";
             $insert_run = mysqli_query($connection, $insert);
+
+            if ($insert_run) {
+              $_SESSION['status'] = "Account Has Been Accepted!";
+              $_SESSION['status_code'] = "success";
+              echo "<script>window.location.href='requests.php?msg=accept';</script>";
+            }
         }
         $delete = "DELETE FROM requests WHERE enrollment_number='$id'";
         $delete_run = mysqli_query($connection, $delete);
-        if($delete_run){
-            echo '<div class="alert alert-success" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-              <span class="text-success">"Account Has Been Accepted!"</span>
-            </div>';
+
+        if ($delete_run) {
+          $_SESSION['status'] = "Account Has Been Accepted!";
+          $_SESSION['status_code'] = "success";
+          echo "<script>window.location.href='requests.php?msg=accept';</script>";
         }
         else{
-            echo '<div class="alert alert-danger" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-                  <span class="text-danger">"Unknown Error Occured!"</span>
-                </div>';
+            // echo '<div class="alert alert-danger" role="alert">
+            //     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            //       <span aria-hidden="true">×</span>
+            //     </button>
+            //       <span class="text-danger">"Unknown Error Occured!"</span>
+            //     </div>';
+            $_SESSION['status-error'] = "Unknown Error Occured!";
+            $_SESSION['status_code-error'] = "error";
+            echo "<script>window.location.href='requests.php?msg=error';</script>";
         }
     }
     else{
-        echo '<div class="alert alert-danger" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-              <span class="text-danger">"Error Occured!"</span>
-            </div>';
+        // echo '<div class="alert alert-danger" role="alert">
+        //     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        //       <span aria-hidden="true">×</span>
+        //     </button>
+        //       <span class="text-danger">"Error Occured!"</span>
+        //     </div>';
+        $_SESSION['status-error'] = "Error Occured!";
+        $_SESSION['status_code-error'] = "error";
+        echo "<script>window.location.href='requests.php?msg=error';</script>";
     }
 
-?>
-
-<?php
-include('admin/footer.php');
 ?>

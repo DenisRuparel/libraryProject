@@ -33,7 +33,6 @@ function Get_faculty_avatar($userid, $connection){
     $result = mysqli_query($connection, $query);
 
     while($row = mysqli_fetch_assoc($result)){
-    // foreach($result as $row){
         echo '<img src="'.$row["avatar"].'" width="75" class="img-profile rounded-circle" />';
     }
 }

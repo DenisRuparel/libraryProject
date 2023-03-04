@@ -8,21 +8,22 @@ include('function.php');
 <?php
 $errors = NULL;
 $success = array();
+// $err = '';
 // $rdate = date("d/m/Y", strtotime("+15 days"));
 if(isset($_POST["issue_book_button"])){
     $book_id = $_POST['book_id'];
     $user_id = $_POST['user_id'];
 
     if(empty($_POST["book_id"])){
-        $errors['b-id'] = 'Book ID is required!';
+        $errors .= '<li>Book ID is required!</li>';
     }
 
     if(empty($_POST["user_id"])){
-        $errors['u-id'] = 'Student Enrollment Number is required!';
+        $errors .= '<li>Student Enrollment Number is required!</li>';
     }
 
     if(empty($_POST["book_id"]) || empty($_POST["user_id"])){
-        $errors['boru-id'] = 'Empty Fields Fill it!';
+        $errors .= '<li>Empty Fields Fill it!</li>';
     }
 
     if($errors == NULL){
@@ -61,20 +62,20 @@ if(isset($_POST["issue_book_button"])){
                               echo "<script>window.location.href='issue_book.php?msg=add';</script>";
               }
               else{
-                $errors['r-book'] = 'User has already reached Book Issue Limit, First return pending book!';
+                $errors .= 'User has already reached Book Issue Limit, First return pending book!';
               }
           }
           else{
-            $errors['booknotavailable'] = 'Book not Available!';
+            $errors .= 'Book not Available!';
           }
         }
       }
       else{
-        $errors['booknotfound'] = 'Book not Found!';
+        $errors .= 'Book not Found!';
       }
     }
     else{
-      $errors['err'] = 'Some Error Occured!';
+      $errors .= '<li>Some Error Occured!</li>';
     }
 }
 ?>
@@ -379,8 +380,19 @@ else{
             </button> -->
             <a href="issue_book.php?action=add" class="btn btn-primary">
               <i class="fa fa-plus-circle" aria-hidden="true"></i>
-              Add
+              Issue
             </a>
+            <?php 
+              if($errors != NULL) {
+                // echo '<div class="alert alert-danger alert-dismissible fade show" role="alert"><ul class="list-unstyled">'.$errors.'</ul> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                echo'<div class="alert alert-danger" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                      <span class="text-danger">'.$errors.'</span>
+                    </div>';
+              }
+            ?>
             <?php
               if(isset($_SESSION['success']) && $_SESSION['success'] != ''){
                   // echo '<h4 class="bg-primary"> '.$_SESSION['success'].' </h4>';
@@ -460,9 +472,6 @@ else{
             </tr>
           <?php
           } 
-        }
-        else{
-          echo "No Record Found";
         }
           ?>
         </tbody>

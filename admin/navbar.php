@@ -37,6 +37,20 @@
 
   <!-- Nav Item - Pages Collapse Menu -->
   <li class="nav-item">
+    <a class="nav-link" href="requests.php">
+      <i class="fa fa-bell"></i>
+      <?php
+          require 'database/dbconfig.php';
+          $query = "SELECT enrollment_number FROM requests ORDER BY enrollment_number DESC";  
+          $query_run = mysqli_query($connection, $query);
+          $nrow = mysqli_num_rows($query_run);
+      ?>
+      <span>Requests<span class="badge badge-danger badge-counter"><?php echo $nrow;?></span></span>
+    </a>
+  </li>
+
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item">
     <a class="nav-link" href="show_students.php">
       <i class="fa fa-graduation-cap"></i>
       <span>Students</span>
@@ -107,11 +121,7 @@
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Issued Books:</h6>
         <a class="collapse-item" href="issue_book.php">Issue For Students</a>
-        <a class="collapse-item" href="#">Issue For Faculties</a>
-        <div class="collapse-divider"></div>
-        <h6 class="collapse-header">Show Issue Book Records:</h6>
-        <a class="collapse-item" href="show_issue_book.php">Show Issued For Students</a>
-        <a class="collapse-item" href="#">Show Issued For Faculties</a>
+        <a class="collapse-item" href="faculty_issue_book.php">Issue For Faculties</a>
       </div>
     </div>
   </li>
