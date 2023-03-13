@@ -49,8 +49,8 @@ if(isset($_POST["issue_book_button"])){
               $expected_return_date = date('Y-m-d H:i:s', strtotime($today_date. ' + '.$total_book_issue_day.' days'));
 
               $insert_query = "INSERT INTO issue_book 
-                              (book_id, user_id, issue_date_time, expected_return_date, book_issue_status) 
-                              VALUES ('$book_id', '$user_id', '$today_date', '$expected_return_date', 'Issue')";
+                              (book_id, user_id, issue_date_time, expected_return_date, return_date_time, book_fines, book_issue_status) 
+                              VALUES ('$book_id', '$user_id', '$today_date', '$expected_return_date', '', '0 Rs.', 'Issue')";
 
                               $insert_query_run = mysqli_query($connection, $insert_query);
 
@@ -78,6 +78,61 @@ if(isset($_POST["issue_book_button"])){
       $errors .= '<li>Some Error Occured!</li>';
     }
 }
+
+if(isset($_POST["book_return_button"])){
+    if(isset($_POST["book_return_confirmation"])){ 
+
+        // $return_date_time = get_date_time($connection);
+        // $book_issue_status = 'Return';
+        // $issue_book_id = $_POST['book_id'];
+
+        // $query = "UPDATE issue_book 
+        //           SET return_date_time = $return_date_time, 
+        //           book_issue_status = $book_issue_status 
+        //           WHERE issue_book_id = $issue_book_id";
+
+        // $update_run = mysqli_query($connection, $query);
+
+        // $update_query2 = "UPDATE books 
+        //           SET quantity = quantity + 1 
+        //           WHERE book_id = '".$_POST["book_id"]."'";
+
+        // $update2_run = mysqli_query($connection, $update_query2);
+
+        // echo "<script>window.location.href='issue_book.php?msg=return';</script>";
+        $data = array(
+          ':return_date_time'     =>  get_date_time($connection),
+          ':book_issue_status'    =>  'Return',
+          ':issue_book_id'        =>  $_POST['issue_book_id']
+        );
+
+        $query = "UPDATE issue_book 
+        SET return_date_time = :return_date_time, 
+        book_issue_status = :book_issue_status 
+        WHERE issue_book_id = :issue_book_id";
+
+        $statement = $connect->prepare($query);
+
+        $statement->execute($data);
+
+        $query = "UPDATE books 
+        SET quantity = quantity + 1 
+        WHERE book_id = '".$_POST["book_id"]."'";
+
+        $connect->query($query);
+
+        echo "<script>window.location.href='issue_book.php?msg=return';</script>";
+    }
+    else{
+        $errors = 'Please first confirm return book received by click on checkbox';
+    }
+}   
+
+$query = "SELECT * FROM issue_book 
+          ORDER BY issue_book_id DESC";
+
+$statement = mysqli_query($connection, $query);
+
 ?>
     <?php
       if(isset($_GET['msg'])){
@@ -239,7 +294,10 @@ if(isset($_GET["action"]))
                     $user_result = mysqli_query($connection, $query);
 
                     if($errors != ''){
-                        echo '<div class="alert alert-danger">'.$errors.'</div>';
+                        echo '<div class="alert alert-danger">
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">×</span>
+                              </button>'.$errors.'</div>';
                     }
 
                     foreach($book_result as $book_data){
@@ -303,8 +361,7 @@ if(isset($_GET["action"]))
 
                     $form_item = '';
 
-                    if($status == "Issue")
-                    {
+                    if($status == "Issue"){
                         $status = '<h5><span class="badge badge-success">Issue</span></h5>';
 
                         $form_item = '
@@ -316,8 +373,7 @@ if(isset($_GET["action"]))
                         ';
                     }
 
-                    if($status == 'Not Return')
-                    {
+                    if($status == 'Not Return'){
                         $status = '<h5><span class="badge badge-danger">Not Return</span></h5>';
 
                         $form_item = '
@@ -328,8 +384,7 @@ if(isset($_GET["action"]))
                         ';
                     }
 
-                    if($status == 'Return')
-                    {
+                    if($status == 'Return'){
                         $status = '<h5><span class="badge badge-warning">Return</span></h5>';
                     }
 
@@ -361,7 +416,6 @@ if(isset($_GET["action"]))
                         </div>
                       </div>
                     ';
-
                 }
             }
         }

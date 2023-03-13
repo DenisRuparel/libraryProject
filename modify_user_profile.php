@@ -15,21 +15,21 @@ if(isset($_POST['updatebtn'])){
     $contact = $_POST['edit_contact'];
     $password = $_POST['edit_password'];  
 
-    $email_query = "SELECT * FROM register WHERE email='$email'";
-    $email_query_run = mysqli_query($connection, $email_query);
-    if(mysqli_num_rows($email_query_run) > 0){
-        $errors['email_err'] = "E-mail that you have entered is already exist!"; 
-    }
+    // $email_query = "SELECT * FROM register WHERE email='$email'";
+    // $email_query_run = mysqli_query($connection, $email_query);
+    // if(mysqli_num_rows($email_query_run) > 0){
+    //     $errors['email_err'] = "E-mail that you have entered is already exist!"; 
+    // }
 
-    $phone_query = "SELECT * FROM register WHERE contact='$contact'";
-    $phone_query_run = mysqli_query($connection, $phone_query);
-    if(mysqli_num_rows($phone_query_run) > 0){
-        $errors['contact_err'] = "Contact Number that you have entered is already exist!"; 
-    }
+    // $phone_query = "SELECT * FROM register WHERE contact='$contact'";
+    // $phone_query_run = mysqli_query($connection, $phone_query);
+    // if(mysqli_num_rows($phone_query_run) > 0){
+    //     $errors['contact_err'] = "Contact Number that you have entered is already exist!"; 
+    // }
 
     if(count($errors) === 0){
         
-        $updatequery = "UPDATE register SET enrollment_number='$eno_number', first_name='$first_name',last_name='$last_name',email='$email',contact='$contact',password='$password' user_avatar='$image' WHERE enrollment_number='$eno_number'";
+        $updatequery = "UPDATE register SET enrollment_number='$eno_number', first_name='$first_name',last_name='$last_name',email='$email',contact='$contact',password='$password' WHERE enrollment_number='$eno_number'";
         $update_query_run = mysqli_query($connection, $updatequery);
 
         if($update_query_run){

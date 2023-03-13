@@ -15,21 +15,21 @@ if(isset($_POST['updatebtn'])){
     $contact = $_POST['edit_contact'];
     $password = $_POST['edit_password'];  
 
-    $email_query = "SELECT * FROM faculties WHERE email='$email'";
-    $email_query_run = mysqli_query($connection, $email_query);
-    if(mysqli_num_rows($email_query_run) > 0){
-        $errors['email_err'] = "E-mail that you have entered is already exist!"; 
-    }
+    // $email_query = "SELECT * FROM faculties WHERE email='$email'";
+    // $email_query_run = mysqli_query($connection, $email_query);
+    // if(mysqli_num_rows($email_query_run) > 0){
+    //     $errors['email_err'] = "E-mail that you have entered is already exist!"; 
+    // }
 
-    $phone_query = "SELECT * FROM faculties WHERE contact='$contact'";
-    $phone_query_run = mysqli_query($connection, $phone_query);
-    if(mysqli_num_rows($phone_query_run) > 0){
-        $errors['contact_err'] = "Contact Number that you have entered is already exist!"; 
-    }
+    // $phone_query = "SELECT * FROM faculties WHERE contact='$contact'";
+    // $phone_query_run = mysqli_query($connection, $phone_query);
+    // if(mysqli_num_rows($phone_query_run) > 0){
+    //     $errors['contact_err'] = "Contact Number that you have entered is already exist!"; 
+    // }
 
     if(count($errors) === 0){
         
-        $updatequery = "UPDATE faculties SET f_id='$f_id', f_name='$f_name',l_name='$l_name',email='$email',contact='$contact',password='$password' WHERE f_id='$f_id'";
+        $updatequery = "UPDATE faculties SET f_name='$f_name',l_name='$l_name',email='$email',contact='$contact',password='$password' WHERE f_id='$f_id'";
         $update_query_run = mysqli_query($connection, $updatequery);
 
         if($update_query_run){
