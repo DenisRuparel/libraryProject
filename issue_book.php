@@ -81,25 +81,6 @@ if(isset($_POST["issue_book_button"])){
 
 if(isset($_POST["book_return_button"])){
     if(isset($_POST["book_return_confirmation"])){ 
-
-        // $return_date_time = get_date_time($connection);
-        // $book_issue_status = 'Return';
-        // $issue_book_id = $_POST['book_id'];
-
-        // $query = "UPDATE issue_book 
-        //           SET return_date_time = $return_date_time, 
-        //           book_issue_status = $book_issue_status 
-        //           WHERE issue_book_id = $issue_book_id";
-
-        // $update_run = mysqli_query($connection, $query);
-
-        // $update_query2 = "UPDATE books 
-        //           SET quantity = quantity + 1 
-        //           WHERE book_id = '".$_POST["book_id"]."'";
-
-        // $update2_run = mysqli_query($connection, $update_query2);
-
-        // echo "<script>window.location.href='issue_book.php?msg=return';</script>";
         $data = array(
           ':return_date_time'     =>  get_date_time($connection),
           ':book_issue_status'    =>  'Return',
