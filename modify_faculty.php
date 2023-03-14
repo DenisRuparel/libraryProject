@@ -10,8 +10,7 @@ if(isset($_POST['updatebtn'])){
     $f_id = $_POST['edit_faculty_id'];
     $f_name = $_POST['edit_first_name'];
     $l_name = $_POST['edit_last_name'];
-    $email = $_POST['edit_email
-    '];
+    $email = $_POST['edit_email'];
     $contact = $_POST['edit_contact'];
     $password = $_POST['edit_password'];   
 
@@ -30,7 +29,7 @@ if(isset($_POST['updatebtn'])){
     }
 }
 
-//for delete book
+//for delete faculties
 if(isset($_POST['delete_btn'])){
     $id = $_POST['delete_id'];
 
@@ -81,7 +80,7 @@ if(isset($_POST['delete_btn'])){
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="text" name="edit_email" value="<?php echo $row['email'] ?>" class="form-control" placeholder="Enter Faculty's Email">
+                            <input type="email" name="edit_email" value="<?php echo $row['email'] ?>" class="form-control" placeholder="Enter Faculty's Email">
                         </div>
                         <div class="form-group">
                             <label>Contact</label>

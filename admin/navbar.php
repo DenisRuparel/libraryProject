@@ -387,7 +387,7 @@
             <span class="mr-1 d-none d-lg-inline text-gray-600 small">
               <?php 
                     echo $_SESSION['uid']; 
-                  ?>
+              ?>
             </span>
             <img height="40px" width="40px"
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVVLvF-Ju09woaELw47g_fgxI6h9JU707Twg&usqp=CAU">

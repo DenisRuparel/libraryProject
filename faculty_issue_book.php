@@ -20,9 +20,9 @@ if(isset($_POST["issue_book_button"])){
         $errors .= '<li>Faculty User ID is required!</li>';
     }
 
-    if(empty($_POST["book_id"]) || empty($_POST["user_id"])){
-        $errors .= '<li>Empty Fields Fill it!</li>';
-    }
+    // if(empty($_POST["book_id"]) || empty($_POST["user_id"])){
+    //     $errors .= '<li>Empty Fields Fill it!</li>';
+    // }
 
     if($errors == NULL){
       $query = "SELECT * FROM books WHERE book_id = '$book_id'";
@@ -121,6 +121,14 @@ $statement = mysqli_query($connection, $query);
                     <span aria-hidden="true">×</span>
                   </button>
                     <span class="text-success">Book Issued Successfully!</span>
+                </div>';
+        }
+        if($_GET['msg'] == 'return'){
+          echo '<div class="alert alert-success" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                    <span class="text-success">Book Returned Successfully!</span>
                 </div>';
         }
       }

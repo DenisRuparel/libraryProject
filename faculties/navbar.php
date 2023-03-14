@@ -72,7 +72,7 @@
 
 <!-- Nav Item - Pages Collapse Menu -->
 <li class="nav-item">
-  <a class="nav-link" href="#">
+  <a class="nav-link" href="faculty_show_issue_book.php">
   <i class="fa fa-check"></i>
     <span>Issued Books</span>
   </a>

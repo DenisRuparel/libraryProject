@@ -3,6 +3,7 @@ session_start();
 include('security.php');
 include('faculties/header.php'); 
 include('database/dbconfig.php');
+error_reporting(0);
 ?>
 <?php
 //if user click login button
@@ -12,21 +13,9 @@ if(isset($_POST['signinbtn'])){
     $userid = $_POST['uid'];
     $upassword = $_POST['upassword'];
     if (empty($userid) || empty($upassword)) {
-        $errors['fields'] = "Empty Fields! Please Filled It!"; 
+        $errors['fields'] = "<li>Empty Fields! Please Filled It!</li>"; 
     }
     $checkuid = "SELECT * FROM faculties WHERE f_id = '$userid' and password = '$upassword' limit 1";
-    // $res = mysqli_query($connection, $checkuid);
-    // if(mysqli_num_rows($res) > 0){
-    //     $fetch = mysqli_fetch_assoc($res);
-    //     $status = $fetch['status'];
-    //     $_SESSION['new'] = 'true';
-    //     $_SESSION['uid'] = $uid;
-    //     $_SESSION['upassword'] = $upassword;
-    //     header('location: faculty_index.php');
-    // }
-    // else{
-    //     $errors['incorrect-info'] = "Incorrect user id or password!";
-    // }
     $stmt = $connection->prepare($checkuid);
     $stmt->bind_param('ss',$userid,$upassword);
     $stmt->execute();
@@ -43,6 +32,9 @@ if(isset($_POST['signinbtn'])){
                 header('location: faculty_index.php');
             }
         }
+    }
+    else{
+        $errors['details'] = "<li>Invalid Details!</li>";
     }
 }
 
@@ -68,6 +60,20 @@ if(isset($_POST['signinbtn'])){
                                         </p>
                                             <?php
                                             if(count($errors) > 0){
+                                                ?>
+                                                <div class="alert alert-danger text-center">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                                    <?php
+                                                    foreach($errors as $showerror){
+                                                        echo $showerror;
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <?php
+                                            }
+                                            elseif(count($errors) == 1){
                                                 ?>
                                                 <div class="alert alert-danger text-center">
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
