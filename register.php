@@ -3,6 +3,7 @@ include('security.php');
 include('database/dbconfig.php'); 
 include('profile_pic.php'); 
 include('includes/header.php'); 
+// error_reporting(0);
 ?>
 
 <?php
