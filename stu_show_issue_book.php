@@ -12,7 +12,7 @@ if (!isset($_SESSION["user_name"])) {
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">your issued Books: </h6>
+    <h6 class="m-0 font-weight-bold text-primary">Your issued Books: </h6>
   </div>
 </div>
 
@@ -34,7 +34,7 @@ if (!isset($_SESSION["user_name"])) {
           $query = "SELECT * FROM issue_book 
           INNER JOIN books 
           ON books.book_id = issue_book.book_id 
-          WHERE issue_book.user_id = '".$_SESSION['user_name']."' 
+          WHERE issue_book.user_id = '".$_SESSION['user_name']."' and book_issue_status = 'Issue' 
           ORDER BY issue_book.issue_book_id DESC";
         // $query = "SELECT book_id,book_title,issue_date,return_date FROM issue_book WHERE enrollment_number = '".$_SESSION['user_name']."' ";
           $query_run = mysqli_query($connection, $query);

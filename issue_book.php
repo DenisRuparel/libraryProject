@@ -476,6 +476,7 @@ else{
             <th> Book Issue Date</th>
             <th> Book Return Date</th>
             <th> Book Status</th>
+            <th> Issue Days</th>
             <th> Action</th>
             <!-- <th>EDIT </th>
             <th>DELETE </th> -->
@@ -483,7 +484,7 @@ else{
         </thead>
         <tbody>
         <?php
-        $query = "SELECT * FROM issue_book";
+        $query = "SELECT * FROM issue_book WHERE book_issue_status = 'Issue'";
         $query_run = mysqli_query($connection, $query);
         if(mysqli_num_rows($query_run) > 0){
           while($row = mysqli_fetch_assoc($query_run)){
@@ -507,6 +508,7 @@ else{
             <td><?php  echo $row['issue_date_time']; ?></td>
             <td><?php  echo $row['expected_return_date']; ?></td>
             <td><?php  echo $status; ?></td>
+            <td><?php  echo "hello" ?></td>
             <td>
             <?php
               echo'

@@ -92,7 +92,7 @@
 
 <!-- Nav Item - Charts -->
 <li class="nav-item">
-  <a class="nav-link" href="#">
+  <a class="nav-link" href="show_student_return_books.php">
     <i class="fa fa-thumbs-up"></i>
     <span>Return Books</span></a>
 </li>

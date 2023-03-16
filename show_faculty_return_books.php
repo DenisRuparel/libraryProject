@@ -13,7 +13,7 @@ if (!isset($_SESSION["username"])) {
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">your issued Books: </h6>
+    <h6 class="m-0 font-weight-bold text-primary">Your Returned Books: </h6>
   </div>
 </div>
 
@@ -35,7 +35,7 @@ if (!isset($_SESSION["username"])) {
           $query = "SELECT * FROM f_issue_book 
           INNER JOIN books 
           ON books.book_id = f_issue_book.book_id 
-          WHERE f_issue_book.user_id = '".$_SESSION['userid']."' and book_issue_status = 'Issue'
+          WHERE f_issue_book.user_id = '".$_SESSION['userid']."' and book_issue_status = 'Return'
           ORDER BY f_issue_book.issue_book_id DESC";
           $query_run = mysqli_query($connection, $query);
           if(mysqli_num_rows($query_run) > 0){
@@ -64,9 +64,9 @@ if (!isset($_SESSION["username"])) {
             <?php
             } 
           }
-          else{
-            echo "No Record Found";
-          }
+        //   else{
+        //     echo "No Record Found";
+        //   }
           ?>
         </tbody>
       </table>

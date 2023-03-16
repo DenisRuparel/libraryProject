@@ -130,10 +130,24 @@
   </li>
 
   <!-- Nav Item - Charts -->
-  <li class="nav-item">
+  <!-- <li class="nav-item">
     <a class="nav-link collapsed" href="charts.html">
       <i class="fa fa-thumbs-up"></i>
       <span>Return Books</span></a>
+  </li> -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true"
+      aria-controls="collapseUtilities">
+      <i class="fa fa-thumbs-up"></i>
+      <span>Return Books</span>
+    </a>
+    <div id="collapseUtilities" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Returned Books:</h6>
+        <a class="collapse-item" href="return_books.php">Return For Students</a>
+        <a class="collapse-item" href="faculty_return_books.php">Return For Faculties</a>
+      </div>
+    </div>
   </li>
 
   <!-- Nav Item - Charts -->
@@ -320,15 +334,15 @@
         </li>
 
         <!-- Nav Item - Messages -->
-        <li class="nav-item dropdown no-arrow mx-1">
+        <!-- <li class="nav-item dropdown no-arrow mx-1">
           <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-envelope fa-fw"></i>
+            <i class="fas fa-envelope fa-fw"></i> -->
             <!-- Counter - Messages -->
-            <span class="badge badge-danger badge-counter">7</span>
-          </a>
+            <!-- <span class="badge badge-danger badge-counter">7</span>
+          </a> -->
           <!-- Dropdown - Messages -->
-          <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+          <!-- <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
             aria-labelledby="messagesDropdown">
             <h6 class="dropdown-header">
               Message Center
@@ -379,7 +393,7 @@
             </a>
             <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
           </div>
-        </li>
+        </li> -->
 
         <div class="topbar-divider d-none d-sm-block"></div>
 
