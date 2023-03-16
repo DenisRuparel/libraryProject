@@ -29,7 +29,7 @@ if (!isset($_SESSION["username"])) {
             <th> Price </th>
             <th> Publication </th>
             <th> Purchase Date </th>
-            <th> Quantity </th>
+            <th> Edition </th>
             <th> Availability </th>
           </tr>
         </thead>
@@ -55,7 +55,7 @@ if (!isset($_SESSION["username"])) {
             <td><?php  echo $row['price']; ?></td>
             <td><?php  echo $row['publication']; ?></td>
             <td><?php  echo $row['purchase_date']; ?></td>
-            <td><?php  echo $row['quantity']; ?></td>
+            <td><?php  echo $row['edition']; ?></td>
             <td><?php  echo $availabel; ?></td>
             </tr>
           <?php

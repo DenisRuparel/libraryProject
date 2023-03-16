@@ -18,7 +18,7 @@ if(isset($_POST['savebtn'])){
   $price = $_POST['price'];
   $publication = $_POST['publication'];
   $purchase_date = $_POST['purchase_date'];
-  $quantity = $_POST['quantity'];
+  $edition = $_POST['edition'];
   $availability = 'available';
 
   $bookid_query = "SELECT * FROM books WHERE book_id='$book_id' ";
@@ -28,7 +28,7 @@ if(isset($_POST['savebtn'])){
   }
 
   if(count($errors) === 0){
-      $query = "INSERT INTO books(book_id, book_title, catagory, author_name, price, publication, purchase_date, quantity, availability) VALUES ('$book_id','$book_title','$catagory','$author_name','$price','$publication','$purchase_date','$quantity','$availability')";
+      $query = "INSERT INTO books(book_id, book_title, catagory, author_name, price, publication, purchase_date, edition, availability) VALUES ('$book_id','$book_title','$catagory','$author_name','$price','$publication','$purchase_date','$edition','$availability')";
       $query_run = mysqli_query($connection, $query);
       
       if($query_run){
@@ -85,8 +85,8 @@ if(isset($_POST['savebtn'])){
                 <input type="date" name="purchase_date" class="form-control" placeholder="Enter Book's Purchase Date" required>
             </div>
             <div class="form-group">
-                <label>Quantity</label>
-                <input type="number" name="quantity" class="form-control" placeholder="Enter Book's Quantity" required>
+                <label>Edition</label>
+                <input type="number" name="edition" maxlength="4" class="form-control" placeholder="Enter Book's Edition" required>
             </div>
         </div>
         <div class="modal-footer">
@@ -196,7 +196,7 @@ if(isset($_POST['savebtn'])){
             <th> Price </th>
             <th> Publication </th>
             <th> Purchase Date </th>
-            <th> Quantity </th>
+            <th> Edition </th>
             <th> Availability </th>
             <th>EDIT </th>
             <th>DELETE </th>
@@ -224,7 +224,7 @@ if(isset($_POST['savebtn'])){
             <td><?php  echo $row['price']; ?></td>
             <td><?php  echo $row['publication']; ?></td>
             <td><?php  echo $row['purchase_date']; ?></td>
-            <td><?php  echo $row['quantity']; ?></td>
+            <td><?php  echo $row['edition']; ?></td>
             <td><?php  echo $availabel; ?></td>
               <td>
                   <form action="modify_book.php" method="post">

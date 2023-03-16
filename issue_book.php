@@ -37,13 +37,14 @@ if(isset($_POST["issue_book_button"])){
 
         foreach($query_run as $book_row){
         
-          if($book_row['availability'] == 'Available' && $book_row['quantity'] > 0){
+          if($book_row['availability'] == 'Available'){
         
             $book_issue_limit = get_book_issue_limit_per_user($connection);
 
             $total_book_issue = get_total_book_issue_per_user($connection, $user_id);
 
             if($total_book_issue < $book_issue_limit){
+
               $total_book_issue_day = get_total_book_issue_day($connection);
 
               $today_date = get_date_time($connection);
@@ -56,7 +57,7 @@ if(isset($_POST["issue_book_button"])){
 
                               $insert_query_run = mysqli_query($connection, $insert_query);
 
-                              $update_query = "UPDATE books SET quantity = quantity - 1, 
+                              $update_query = "UPDATE books SET availability = 'Not Available', 
                                               book_updated_on = '$today_date' WHERE book_id = '$book_id'";
 
                               $update_query_run = mysqli_query($connection, $update_query);
@@ -99,7 +100,7 @@ if(isset($_POST["book_return_button"])){
         $statement->execute($data);
 
         $query = "UPDATE books 
-        SET quantity = quantity + 1 
+        SET availability = 'Available' 
         WHERE book_id = '".$_POST["book_id"]."'";
 
         $connect->query($query);

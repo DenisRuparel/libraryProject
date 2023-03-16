@@ -16,10 +16,10 @@ if(isset($_POST['updatebtn'])){
     $price = $_POST['edit_price'];
     $publication = $_POST['edit_publication'];
     $purchase_date = $_POST['edit_purchase_date'];   
-    $quantity = $_POST['edit_quantity'];   
+    $edition = $_POST['edit_edition'];   
     $availability = 'available';   
 
-    $updatequery = "UPDATE books SET book_id='$book_id', book_title='$book_title',catagory='$catagory',author_name='$author_name',price='$price',publication='$publication',purchase_date='$purchase_date', quantity='$quantity', availability='$availability' WHERE book_id='$book_id'";
+    $updatequery = "UPDATE books SET book_id='$book_id', book_title='$book_title',catagory='$catagory',author_name='$author_name',price='$price',publication='$publication',purchase_date='$purchase_date', edition='$edition', availability='$availability' WHERE book_id='$book_id'";
     $update_query_run = mysqli_query($connection, $updatequery);
 
     if($update_query_run){
@@ -100,8 +100,8 @@ if(isset($_POST['delete_btn'])){
                             <input type="date" name="edit_purchase_date" value="<?php echo $row['purchase_date'] ?>" class="form-control" placeholder="Enter Book's Purchase Date">
                         </div>
                         <div class="form-group">
-                            <label>Quantity</label>
-                            <input type="number" name="edit_quantity" value="<?php echo $row['quantity'] ?>" class="form-control" placeholder="Enter Book's Quantity">
+                            <label>Edition</label>
+                            <input type="number" name="edit_edition" value="<?php echo $row['edition'] ?>" class="form-control" placeholder="Enter Book's Edition">
                         </div>
                             <a href="add_books.php" class="btn btn-danger"> CANCEL </a>
                             <button type="submit" name="updatebtn" class="btn btn-primary"> Update </button>
