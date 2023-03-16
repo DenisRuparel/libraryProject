@@ -3,17 +3,6 @@ include('security.php');
 include('database/dbconfig.php');
 // session_start();
     
-    function is_admin_login(){
-        if(isset($_SESSION['uid'])){
-            return true;
-        }
-        return false;
-    }
-
-
-
-
-
     // function get_one_day_fines($connection){
     //     $output = 0;
     //     $query = "SELECT library_one_day_fine FROM settings 

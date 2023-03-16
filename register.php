@@ -1,21 +1,20 @@
 <?php
-include('security.php'); 
-include('database/dbconfig.php'); 
+include('security.php');  
 include('profile_pic.php'); 
 include('includes/header.php'); 
-// error_reporting(0);
+require "Send_Mail/autoload.php";
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 ?>
 
 <?php
 session_start();
-// include('security.php');
 $email = "";
 $name = "";
 $errors = array();
 $success = array();
 
-if(isset($_POST['registerbtn']))
-{
+if(isset($_POST['registerbtn'])){
     $eno = $_POST['enrollmentnumber'];
     $fname = $_POST['firstname'];
     $lname = $_POST['lastname'];
@@ -25,27 +24,27 @@ if(isset($_POST['registerbtn']))
     $rpassword = $_POST['repeatpassword'];
     $avatar = make_avatar(strtoupper($fname[0]));
 
-    if (empty($eno) || empty($fname) || empty($lname) || empty($email) || empty($contact) || empty($password) || empty($rpassword)) {
-        $errors['fields'] = "Empty Fields! Please Filled It!"; 
-    }
+    // if (empty($eno) || empty($fname) || empty($lname) || empty($email) || empty($contact) || empty($password) || empty($rpassword)) {
+    //     $errors['fields'] = "Empty Fields! Please Filled It!"; 
+    // }
     
     if($password !== $rpassword){
         $errors['password'] = "Confirm password not matched!";
     }
 
-    $eno_query = "SELECT * FROM requests WHERE enrollment_number='$eno'";
+    $eno_query = "SELECT * FROM register WHERE enrollment_number='$eno'";
     $eno_query_run = mysqli_query($connection, $eno_query);
     if(mysqli_num_rows($eno_query_run) > 0){
         $errors['en_number'] = "Enrollment Number that you have entered is already exist!"; 
     }
 
-    $email_query = "SELECT * FROM requests WHERE email='$email'";
+    $email_query = "SELECT * FROM register WHERE email='$email'";
     $email_query_run = mysqli_query($connection, $email_query);
     if(mysqli_num_rows($email_query_run) > 0){
         $errors['email_err'] = "E-mail that you have entered is already exist!"; 
     }
 
-    $phone_query = "SELECT * FROM requests WHERE contact='$contact'";
+    $phone_query = "SELECT * FROM register WHERE contact='$contact'";
     $phone_query_run = mysqli_query($connection, $phone_query);
     if(mysqli_num_rows($phone_query_run) > 0){
         $errors['contact_err'] = "Contact Number that you have entered is already exist!"; 
@@ -64,21 +63,41 @@ if(isset($_POST['registerbtn']))
       // $connection->close();
 
       if ($stmt) {
-        $subject = "Registration For Library | GP Porbandar Department Library";
-            $message="Hello '.$eno.',
-                        You Are Successfully Registered!
-                        in GP Porbandar Computer Department Library, But Your Account Request is Pending Meet Admin 
-                        For Approvel Request Once Admin Accept The Request, You Can Login in GP Porbandar Computer Department Library
-                    
+        $to = $email; 
+        $mail = new PHPMailer(true);
+        $subject='Registration For Library | GP Porbandar Department Library';
+        $message='Hello <b>'.$eno.'</b>,
+                        <br>You Are Successfully Registered!</br>
+                        <br>in GP Porbandar Computer Department Library, But Your Account Request is Pending Meet Admin</br>
+                        <br>For Approvel Request Once Admin Accept The Request, You Can Login in GP Porbandar Computer Department Library</br>
+                        <br>
                         Thank you,
-                        GP Porbandar Department Library";
-            $sender = "From: denisruparel28@gmail.com";
-            if(mail($email, $subject, $message, $sender)){
+                        <br>GP Porbandar Department Library</br>';
+        // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->SMTPAuth = true;
+        $mail->IsHTML(true);
+        $mail->AddReplyTo("denisruparel28@gmail.com");
+        $mail->Host = "smtp.gmail.com";
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        $mail->Username = "denisruparel28@gmail.com";
+        $mail->Password = "tvyzbzxvpaeeohux";
+
+        $mail->setFrom("denisruparel28@gmail.com","GP Porbandar Department Library");
+        $mail->addAddress($to, "");
+
+        $mail->Subject = $subject;  
+        $mail->Body = $message;
+
+        $m = $mail->send();
+
+            if($m){
                 $_SESSION['status'] = "Your Account Request is pending! We've sent a mail to your email - $email";
                 $_SESSION['status_code'] = "success";
                 $_SESSION['email'] = $email;
                 $_SESSION['password'] = $password;
-                // $success['register'] = "Your Account is Successfully Registered! We've sent a mail to your email - $email";
                 header('location: register.php'); 
                 exit();
             }
@@ -156,35 +175,35 @@ if(isset($_POST['registerbtn']))
               </div>
               <form class="user" action="register.php" method="POST" autocomplete="">
                 <div class="form-group">
-                  <input type="number" name="enrollmentnumber" class="form-control form-control-user"
-                    id="enrollmentnumber" placeholder="Enrollment Number" pattern="[0-9]{12}">
+                  <input type="text" name="enrollmentnumber" class="form-control form-control-user"
+                    id="enrollmentnumber" placeholder="Enrollment Number" pattern="[0-9]{12}" title="Enrollment Number" required>
                 </div>
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                     <input type="text" name="firstname" class="form-control form-control-user" id="firstname"
-                      placeholder="First Name">
+                      placeholder="First Name" required>
                   </div>
                   <div class="col-sm-6">
                     <input type="text" name="lastname" class="form-control form-control-user" id="lastname"
-                      placeholder="Last Name">
+                      placeholder="Last Name" required>
                   </div>
                 </div>
                 <div class="form-group">
                   <input type="email" name="email" class="form-control form-control-user" id="email"
-                    placeholder="Email Address">
+                    placeholder="Email Address" required>
                 </div>
                 <div class="form-group">
-                  <input type="tel" name="contact" class="form-control form-control-user" id="contact"
-                    placeholder="Contact" pattern="[0-9]{10}">
+                  <input type="text" name="contact" class="form-control form-control-user" id="contact"
+                    placeholder="Contact" pattern="[0-9]{10}" required>
                 </div>
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                     <input type="password" name="password" class="form-control form-control-user" id="password"
-                      placeholder="Password">
+                      placeholder="Password" minlength="8" maxlength="15" required>
                   </div>
                   <div class="col-sm-6">
                     <input type="password" name="repeatpassword" class="form-control form-control-user"
-                      id="repeatpassword" placeholder="Repeat Password">
+                      id="repeatpassword" placeholder="Repeat Password" minlength="8" maxlength="15" required> 
                   </div>
                 </div>
                 <button type="submit" name="registerbtn" class="btn btn-primary btn-user btn-block">Register</button>
@@ -202,5 +221,5 @@ if(isset($_POST['registerbtn']))
 </body>
 
 <?php
-include('includes/scripts.php');
+// include('includes/scripts.php');
 ?>

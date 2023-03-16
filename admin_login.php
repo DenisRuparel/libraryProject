@@ -12,9 +12,9 @@ $success = array();
 if(isset($_POST['signinbtn'])){
     $uid = $_POST['uid'];
     $upassword = $_POST['upassword'];
-    if (empty($uid) || empty($upassword)) {
-        $errors['fields'] = "Empty Fields! Please Filled It!"; 
-    }
+    // if (empty($uid) || empty($upassword)) {
+    //     $errors['fields'] = "Empty Fields! Please Filled It!"; 
+    // }
     $checkuid = "SELECT * FROM admin WHERE user_id = '$uid' and password = '$upassword' limit 1";
     $res = mysqli_query($connection, $checkuid);
     if(mysqli_num_rows($res) > 0){
@@ -69,18 +69,11 @@ if(isset($_POST['signinbtn'])){
                                     </div>
                                     <form class="user" action="admin_login.php" method="POST" autocomplete="">
                                         <div class="form-group">
-                                            <input type="text" name="uid" class="form-control form-control-user" placeholder="Enter User Id">
+                                            <input type="text" name="uid" class="form-control form-control-user" placeholder="Enter User Id" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="upassword" class="form-control form-control-user" placeholder="Password">
+                                            <input type="password" name="upassword" class="form-control form-control-user" placeholder="Password" minlength="8" maxlength="15" required>
                                         </div>
-                                        <!-- <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div> -->
                                         <button type="submit" name="signinbtn" class="btn btn-primary btn-user btn-block"> Login </button>
                                     </form>
                                     <hr>    

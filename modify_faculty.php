@@ -2,7 +2,9 @@
 include('admin/header.php'); 
 include('admin/navbar.php'); 
 include('security.php'); 
-// require_once "code.php";
+if (!isset($_SESSION["uid"])) {
+    header("location:admin_login.php");
+  }
 ?>
 <?php
 //For update faculties

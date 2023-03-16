@@ -3,7 +3,6 @@
 include('security.php');
 include('includes/header.php'); 
 ?>
-<?php require_once "code.php"; ?>
 <?php
 if($_SESSION['info'] == false){
     header('Location: login.php');  
@@ -45,13 +44,6 @@ if($_SESSION['info'] == false){
                                             <button type="submit" name="rstbtn" class="btn btn-primary btn-user btn-block"> Back To Login! </button>
                                         </div>
                                     </form>
-                                    <!-- <hr>
-                                    <div class="text-center">
-                                        <a class="small" href="register.php">Create an Account!</a>
-                                    </div>
-                                    <div class="text-center">
-                                        <a class="small" href="login.php">Already have an account? Login!</a>
-                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -64,5 +56,5 @@ if($_SESSION['info'] == false){
 
     </div>
 <?php
-include('includes/scripts.php'); 
+// include('includes/scripts.php'); 
 ?>

@@ -1,7 +1,8 @@
  <?php
   session_start();
-  include('database/dbconfig.php'); 
+  // include('database/dbconfig.php'); 
   include('profile_pic.php');
+  include('security.php');
 
   if (!isset($_SESSION["userid"])) {
     header("location:faculty_login.php");

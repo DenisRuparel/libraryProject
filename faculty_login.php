@@ -12,9 +12,9 @@ $success = array();
 if(isset($_POST['signinbtn'])){
     $userid = $_POST['uid'];
     $upassword = $_POST['upassword'];
-    if (empty($userid) || empty($upassword)) {
-        $errors['fields'] = "<li>Empty Fields! Please Filled It!</li>"; 
-    }
+    // if (empty($userid) || empty($upassword)) {
+    //     $errors['fields'] = "<li>Empty Fields! Please Filled It!</li>"; 
+    // }
     $checkuid = "SELECT * FROM faculties WHERE f_id = '$userid' and password = '$upassword' limit 1";
     $stmt = $connection->prepare($checkuid);
     $stmt->bind_param('ss',$userid,$upassword);
@@ -91,10 +91,10 @@ if(isset($_POST['signinbtn'])){
                                     </div>
                                     <form class="user" action="faculty_login.php" method="POST" autocomplete="">
                                         <div class="form-group">
-                                            <input type="text" name="uid" class="form-control form-control-user" placeholder="Enter User Id">
+                                            <input type="text" name="uid" class="form-control form-control-user" placeholder="Enter User Id" maxlength="3" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="upassword" class="form-control form-control-user" placeholder="Password">
+                                            <input type="password" name="upassword" class="form-control form-control-user" placeholder="Password" minlength="8" maxlength="15" required>
                                         </div>
                                         <!-- <div class="form-group">
                                             <div class="custom-control custom-checkbox small">

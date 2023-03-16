@@ -2,6 +2,9 @@
 include('admin/header.php'); 
 include('admin/navbar.php'); 
 include('security.php'); 
+if (!isset($_SESSION["uid"])) {
+  header("location:admin_login.php");
+} 
 ?>
 <?php
 //For update profile
@@ -122,11 +125,11 @@ if(isset($_POST['updatebtn'])){
                         </div>
                         <div class="form-group">
                             <label>Contact</label>
-                            <input type="tel" name="edit_contact" value="<?php echo $row['contact']?>" class="form-control" placeholder="Enter Contact Number" >
+                            <input type="text" pattern="[0-9]{10}" name="edit_contact" value="<?php echo $row['contact']?>" class="form-control" placeholder="Enter Contact Number" >
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" name="edit_password" value="<?php echo $row['password']?>" class="form-control" placeholder="Enter Password">
+                            <input type="password" name="edit_password" value="<?php echo $row['password']?>" class="form-control" placeholder="Enter Password" minlength="8" maxlength="15">
                         </div>
                             <a href="home.php" class="btn btn-danger"> CANCEL </a>
                             <button type="submit" name="updatebtn" class="btn btn-primary"> Update </button>

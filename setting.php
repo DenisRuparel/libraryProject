@@ -2,16 +2,10 @@
 include('admin/header.php'); 
 include('admin/navbar.php'); 
 include('security.php'); 
-// include '../database_connection.php';
+if (!isset($_SESSION["uid"])) {
+  header("location:admin_login.php");
+}
 
-// include '../function.php';
-
-// if(!is_admin_login())
-// {
-// 	header('location:../admin_login.php');
-// }
-
-// $message = '';
 $errors = array();
 $success = array();
 

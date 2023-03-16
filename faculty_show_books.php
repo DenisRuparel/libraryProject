@@ -2,6 +2,9 @@
 include('faculties/header.php'); 
 include('faculties/navbar.php'); 
 include('security.php'); 
+if (!isset($_SESSION["username"])) {
+  header("location:faculty_login.php");
+} 
 ?>
 
 <div class="container-fluid">

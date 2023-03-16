@@ -2,6 +2,9 @@
 include('faculties/header.php'); 
 include('faculties/navbar.php'); 
 include('security.php'); 
+if (!isset($_SESSION["username"])) {
+  header("location:faculty_login.php");
+}
 ?>
 <?php
 //For update book
@@ -124,11 +127,11 @@ if(isset($_POST['updatebtn'])){
                             </div>
                             <div class="form-group">
                                 <label>Contact</label>
-                                <input type="tel" name="edit_contact" value="<?php echo $row['contact']; ?>" class="form-control" placeholder="Enter Contact" >
+                                <input type="text" pattern="[0-9]{10}" name="edit_contact" value="<?php echo $row['contact']; ?>" class="form-control" placeholder="Enter Contact" >
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" name="edit_password" value="<?php echo $row['password']; ?>" class="form-control" placeholder="Enter Password">
+                                <input type="password" name="edit_password" value="<?php echo $row['password']; ?>" class="form-control" placeholder="Enter Password" minlength="8" maxlength="15">
                             </div>
                                 <a href="faculty_index.php" class="btn btn-danger"> CANCEL </a>
                                 <button type="submit" name="updatebtn" class="btn btn-primary"> Update </button>

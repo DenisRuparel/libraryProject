@@ -2,6 +2,9 @@
   session_start();
   // error_reporting(0);
   include('security.php');
+  if (!isset($_SESSION["uid"])) {
+    header("location:admin_login.php");
+  }
  ?>
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">

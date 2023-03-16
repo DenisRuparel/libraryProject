@@ -6,7 +6,6 @@ include('includes/header.php');
 error_reporting(0);
 ?>
 <?php
-//if user click login button
 $email = "";
 $name = "";
 $errors = array();
@@ -14,9 +13,9 @@ $success = array();
 if(isset($_POST['login_btn'])){
     $eno_login = $_POST['enrollment_number'];
     $password_login = $_POST['password'];
-    if (empty($eno_login) || empty($password_login)) {
-        $errors['fields'] = "Empty Fields! Please Filled It!"; 
-    }
+    // if (empty($eno_login) || empty($password_login)) {
+    //     $errors['fields'] = "Empty Fields! Please Filled It!"; 
+    // }
     $check_eno = "SELECT * FROM register WHERE enrollment_number = '$eno_login' and password = '$password_login' limit 1";
     $stmt = $connection->prepare($check_eno);
     $stmt->bind_param('ss',$eno_login,$password_login);
@@ -58,6 +57,29 @@ if(isset($_POST['login_btn'])){
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Login here!</h1>
                                         <p class="text-center">Login with your enrollment number and password.</p>
+                                        <?php
+                                            if(isset($_SESSION['info']) && $_SESSION['info'] != ''){
+                                                // echo '<h4 class="bg-primary"> '.$_SESSION['success'].' </h4>';
+                                                echo '<div class="alert alert-success" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <span class="text-success">'.$_SESSION['info'].'</span>
+                                                    </div>';
+                                                unset($_SESSION['info']);
+                                            }
+
+                                            // if(isset($_SESSION['status']) && $_SESSION['status'] != ''){
+                                            //     // echo '<h4 class="bg-danger"> '.$_SESSION['status'].' </h4>';
+                                            //     echo '<div class="alert alert-success" role="alert">
+                                            //         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            //         <span aria-hidden="true">×</span>
+                                            //         </button>
+                                            //         <span class="text-success">'.$_SESSION['status'].'</span>
+                                            //         </div>';
+                                            //     unset($_SESSION['status']);
+                                            // }
+                                        ?>
                                             <?php
                                             if(count($errors) > 0){
                                                 ?>
@@ -77,18 +99,11 @@ if(isset($_POST['login_btn'])){
                                     </div>
                                     <form class="user" action="login.php" method="POST" autocomplete="">
                                         <div class="form-group">
-                                            <input type="number" name="enrollment_number" class="form-control form-control-user" placeholder="Enter Enrollment Number">
+                                            <input type="text" name="enrollment_number" class="form-control form-control-user" placeholder="Enter Enrollment Number"  pattern="[0-9]{12}" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="password" class="form-control form-control-user" placeholder="Password">
+                                            <input type="password" name="password" class="form-control form-control-user" placeholder="Password" minlength="8" maxlength="15" required>
                                         </div>
-                                        <!-- <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div> -->
                                         <button type="submit" name="login_btn" class="btn btn-primary btn-user btn-block"> Login </button>
                                     </form>
                                     <hr>    

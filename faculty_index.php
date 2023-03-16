@@ -1,7 +1,11 @@
 <?php
 include('security.php');
 include('faculties/header.php'); 
-include('faculties/navbar.php'); 
+include('faculties/navbar.php');
+
+if (!isset($_SESSION["userid"])) {
+  header("location:faculty_login.php");
+} 
 ?>
 
 <!-- Begin Page Content -->

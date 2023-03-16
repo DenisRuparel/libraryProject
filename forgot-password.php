@@ -1,7 +1,10 @@
 <?php
 session_start();
 include('security.php');
-include('includes/header.php'); 
+include('includes/header.php');
+require "Send_Mail/autoload.php";
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 ?>
 <?php
 //email system start for forget password
@@ -46,8 +49,9 @@ include('security.php');
                         $email=base64_encode($f_mail);
                         
                         $name=$res['first_name'];
-                        
-                        $to=$res['email'];
+
+                        $to = $res['email']; 
+                        $mail = new PHPMailer(true);
                         $subject='Password Reset | GP Porbandar Department Library';
                         $message="Hello $name,<br> 
                                 Someone requested to reset your password.<br>
@@ -59,12 +63,25 @@ include('security.php');
                                 <br><br>
                                 GP Porbandar Department Library
                                 <br><br>";
-                            
-                        $headers = "MIME-Version: 1.0" . "\r\n";
-                        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-                        
-                        $headers .='From:noreply@gmail.com/';
-                        $m=mail($to,$subject,$message,$headers);
+                        // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+                        $mail->isSMTP();
+                        $mail->SMTPAuth = true;
+                        $mail->IsHTML(true);
+                        $mail->AddReplyTo("denisruparel28@gmail.com");
+                        $mail->Host = "smtp.gmail.com";
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                        $mail->Port = 587;
+
+                        $mail->Username = "denisruparel28@gmail.com";
+                        $mail->Password = "tvyzbzxvpaeeohux";
+
+                        $mail->setFrom("denisruparel28@gmail.com","GP Porbandar Department Library");
+                        $mail->addAddress($to, "");
+
+                        $mail->Subject = $subject;  
+                        $mail->Body = $message;
+
+                        $m = $mail->send();
                             
                         if($m)
                         {
@@ -126,9 +143,7 @@ include('security.php');
                                             and we'll send you a link to reset your password!</p>
                                     </div>
                                     <form class="user" method="POST">
-                                    <?php 
-                                        include 'code.php';
-                                                            
+                                    <?php                   
                                         if(isset($_SESSION['new'])=="true"){
                                         echo '<div class="alert alert-success absolue center text-center" role="alert">
                                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">

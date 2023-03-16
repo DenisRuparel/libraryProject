@@ -2,6 +2,9 @@
 include('admin/header.php'); 
 include('admin/navbar.php'); 
 include('security.php'); 
+if (!isset($_SESSION["uid"])) {
+  header("location:admin_login.php");
+}
 ?>
 
 <div class="container-fluid">

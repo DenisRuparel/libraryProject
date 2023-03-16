@@ -3,11 +3,11 @@
 include('admin/header.php'); 
 include('admin/navbar.php'); 
 include('security.php'); 
+if (!isset($_SESSION["uid"])) {
+  header("location:admin_login.php");
+}
 ?>
 <?php
-//for add book
-// $email = "";
-// $name = "";
 $errors = array();
 $success = array();
 if(isset($_POST['savebtn'])){

@@ -2,6 +2,9 @@
 include('includes/header.php'); 
 include('includes/navbar.php'); 
 include('security.php'); 
+if (!isset($_SESSION["user_name"])) {
+  header("location:login.php");
+}
 ?>
 <?php
 //For update book
@@ -124,17 +127,12 @@ if(isset($_POST['updatebtn'])){
                             </div>
                             <div class="form-group">
                                 <label>Contact</label>
-                                <input type="tel" name="edit_contact" value="<?php echo $row['contact']; ?>" class="form-control" placeholder="Enter Contact" >
+                                <input type="text" name="edit_contact" pattern="[0-9]{10}" value="<?php echo $row['contact']; ?>" class="form-control" placeholder="Enter Contact" >
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" name="edit_password" value="<?php echo $row['password']; ?>" class="form-control" placeholder="Enter Password">
+                                <input type="password" name="edit_password" value="<?php echo $row['password']; ?>" class="form-control" placeholder="Enter Password" minlength="8" maxlength="15">
                             </div>
-                            <!-- <div class="form-group">
-                                <label>Upload Your Profile Photo &#8594;</label>
-                                <input type="file" name="edit_user_avatar" class="form-control" value="<?php echo $row['user_avatar']; ?>">
-                                <span class="text-muted">Only .jpg & .png image allowed. Image size must be 225 x 225</span>
-                            </div> -->
                                 <a href="index.php" class="btn btn-danger"> CANCEL </a>
                                 <button type="submit" name="updatebtn" class="btn btn-primary"> Update </button>
                             </form>

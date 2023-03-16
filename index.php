@@ -2,6 +2,9 @@
 include('security.php');
 include('includes/header.php'); 
 include('includes/navbar.php'); 
+if (!isset($_SESSION["user_name"])) {
+  header("location:login.php");
+} 
 ?>
 
 <!-- Begin Page Content -->

@@ -2,6 +2,9 @@
 include('includes/header.php'); 
 include('includes/navbar.php'); 
 include('security.php');
+if (!isset($_SESSION["user_name"])) {
+  header("location:login.php");
+}
 ?>
 
 <div class="container-fluid">

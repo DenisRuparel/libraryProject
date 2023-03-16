@@ -3,7 +3,9 @@ include('admin/header.php');
 include('admin/navbar.php'); 
 include('security.php'); 
 include('function.php');
-
+if (!isset($_SESSION["uid"])) {
+  header("location:admin_login.php");
+} 
 ?>
 <?php
 $errors = NULL;
@@ -14,13 +16,13 @@ if(isset($_POST["issue_book_button"])){
     $book_id = $_POST['book_id'];
     $user_id = $_POST['user_id'];
 
-    if(empty($_POST["book_id"])){
-        $errors .= '<li>Book ID is required!</li>';
-    }
+    // if(empty($_POST["book_id"])){
+    //     $errors .= '<li>Book ID is required!</li>';
+    // }
 
-    if(empty($_POST["user_id"])){
-        $errors .= '<li>Student Enrollment Number is required!</li>';
-    }
+    // if(empty($_POST["user_id"])){
+    //     $errors .= '<li>Student Enrollment Number is required!</li>';
+    // }
 
     // if(empty($_POST["book_id"]) || empty($_POST["user_id"])){
     //     $errors .= '<li>Empty Fields Fill it!</li>';
@@ -153,13 +155,13 @@ if(isset($_GET["action"]))
         <div class="mb-3">
           <label class="form-label">Book ID</label>
           <span style="color:red;">*</span>
-          <input type="text" name="book_id" id="book_id" class="form-control" />
+          <input type="text" name="book_id" id="book_id" class="form-control" required/>
           <span id="book_id_result"></span>
         </div>
         <div class="mb-3">
           <label class="form-label">Student Enrollment Number</label>
           <span style="color:red;">*</span>
-          <input type="text" name="user_id" id="user_id" class="form-control" />
+          <input type="text" name="user_id" id="user_id" class="form-control" required/>
           <span id="enrollment_number_result"></span>
         </div>
         <div class="mt-4 mb-0">

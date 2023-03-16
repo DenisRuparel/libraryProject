@@ -1,10 +1,11 @@
 <?php
-// session_start();
 include('admin/header.php'); 
 include('admin/navbar.php'); 
 include('security.php'); 
 include('profile_pic.php');
-// error_reporting(0);
+require "Send_Mail/autoload.php";
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 ?>
 <?php
 //for add Faculties
@@ -54,14 +55,43 @@ if(isset($_POST['savebtn'])){
         // $connection->close();
 
       if($stmt){
-        $subject = "Registration For Library | GP Porbandar Department Library";
-            $message="Hello '$f_name',
-                        You Are Successfully Registered! in GP Porbandar Computer Department Library.
+        // $subject = "Registration For Library | GP Porbandar Department Library";
+        //     $message="Hello '$f_name',
+        //                 You Are Successfully Registered! in GP Porbandar Computer Department Library.
 			        
+        //                 Thank you,
+        //                 GP Porbandar Department Library";
+        //     $sender = "From: denisruparel28@gmail.com";
+        $to = $email; 
+        $mail = new PHPMailer(true);
+        $subject='Registration For Library | GP Porbandar Department Library';
+        $message='Hello <b>'.$f_name.'</b>,
+                        <br>You Are Successfully Registered!</br>
+                        <br>in GP Porbandar Computer Department Library!</br>
+                        <br>Your User Name is <b>'.$f_id.'</b> and Your Password is <b>'.$password.'</b></br>
+                        <br>
                         Thank you,
-                        GP Porbandar Department Library";
-            $sender = "From: denisruparel28@gmail.com";
-            if(mail($email, $subject, $message, $sender)){
+                        <br>GP Porbandar Department Library</br>';
+        // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->SMTPAuth = true;
+        $mail->IsHTML(true);
+        $mail->AddReplyTo("denisruparel28@gmail.com");
+        $mail->Host = "smtp.gmail.com";
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        $mail->Username = "denisruparel28@gmail.com";
+        $mail->Password = "tvyzbzxvpaeeohux";
+
+        $mail->setFrom("denisruparel28@gmail.com","GP Porbandar Department Library");
+        $mail->addAddress($to, "");
+
+        $mail->Subject = $subject;  
+        $mail->Body = $message;
+
+        $m = $mail->send();
+            if($m){
                 $_SESSION['status'] = "Faculty Added Successsfully! We've sent a mail to - $email";
                 $_SESSION['status_code'] = "success";
                 $_SESSION['email'] = $email;
@@ -92,7 +122,7 @@ if(isset($_POST['savebtn'])){
 
             <div class="form-group">
                 <label> Faculty id </label>
-                <input type="text" name="f_id" class="form-control" placeholder="Enter Faculty's id" required>
+                <input type="text" name="f_id" class="form-control" placeholder="Enter Faculty's id" maxlength="3" required>
             </div>
             <div class="form-group">
                 <label>First Name</label>
@@ -104,15 +134,15 @@ if(isset($_POST['savebtn'])){
             </div>
             <div class="form-group">
                 <label>Email</label>
-                <input type="text" name="email" class="form-control" placeholder="Enter Faculty's Email" required>
+                <input type="email" name="email" class="form-control" placeholder="Enter Faculty's Email" required>
             </div>
             <div class="form-group">
                 <label>Contact</label>
-                <input type="tel" name="contact" class="form-control" placeholder="Enter Faculty's Contact" required>
+                <input type="tel" name="contact" class="form-control" placeholder="Enter Faculty's Contact" pattern="[0-9]{10}" required>
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" name="password" class="form-control" placeholder="Enter Faculty's Password" required>
+                <input type="password" name="password" class="form-control" placeholder="Enter Faculty's Password" minlength="8" maxlength="15" required>
             </div>
         </div>
         <div class="modal-footer">

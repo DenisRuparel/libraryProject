@@ -2,15 +2,13 @@
 session_start();
 include('security.php');
 include('includes/header.php');
-// require_once "code.php"; 
+
 $f_email = $_SESSION['f_email'];
-if($f_email == false){
-    header('Location: login.php');
+if(!isset($_SESSION["f_email"])){
+    header("Location: login.php");
 }
 ?>
 <?php
-$email = "";
-$name = "";
 $errors = array();
 $success = array();
 //if user click newpassbtn button
@@ -22,14 +20,15 @@ if(isset($_POST['newpassbtn'])){
         $errors['new-password'] = "Confirm password does not matched!";
     }
     else{
-        // $code = 0;
         $remail=$_SESSION['f_email'];         //getting this email using session
         $update_pass = "UPDATE register SET password = '$new_password' WHERE email = '$remail';";
         $run_query = mysqli_query($connection, $update_pass);
         if($run_query){
-            $info = "Your password changed. Now you can login with your new password.";
+            $info = "Your password changed. Now you can login with your new password!";
             $_SESSION['info'] = $info;
-            header('Location: password_changed.php');
+            // $_SESSION['status'] = "Your password changed. Now you can login with your new password!";
+            // $_SESSION['status_code'] = "success";
+            header('Location: login.php');
         }
         else{
             $errors['db-error'] = "Failed to change your password!";
@@ -88,12 +87,12 @@ if(isset($_POST['newpassbtn'])){
                                         <div class="form-group">
                                             <input type="password" name="newpassword" class="form-control form-control-user"
                                                 id="exampleInputnewpassword" aria-describedby="newpasswordHelp"
-                                                placeholder="Enter New Password...">
+                                                placeholder="Enter New Password..." minlength="8" maxlength="15" required>
                                         </div>
                                         <div class="form-group">
                                             <input type="password" name="conpassword" class="form-control form-control-user"
                                                 id="exampleInputnpassword" aria-describedby="npasswordHelp"
-                                                placeholder="Confirm Your Password...">
+                                                placeholder="Confirm Your Password..." minlength="8" maxlength="15" required>
                                         </div>
                                         <button type="submit" name="newpassbtn" class="btn btn-primary btn-user btn-block"> Reset Password </button>
                                     </form>
