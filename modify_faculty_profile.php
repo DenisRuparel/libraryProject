@@ -2,6 +2,7 @@
 include('faculties/header.php'); 
 include('faculties/navbar.php'); 
 include('security.php'); 
+error_reporting(0);
 if (!isset($_SESSION["username"])) {
   header("location:faculty_login.php");
 }

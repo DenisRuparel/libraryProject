@@ -55,7 +55,7 @@ if(isset($_POST['signinbtn'])){
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Login here!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Faculty Login</h1>
                                         <p class="text-center">Login with your user id and password!
                                         </p>
                                             <?php
@@ -96,18 +96,16 @@ if(isset($_POST['signinbtn'])){
                                         <div class="form-group">
                                             <input type="password" name="upassword" class="form-control form-control-user" placeholder="Password" minlength="8" maxlength="15" required>
                                         </div>
-                                        <!-- <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div> -->
                                         <button type="submit" name="signinbtn" class="btn btn-primary btn-user btn-block"> Login </button>
                                     </form>
                                     <hr>    
                                     <div class="text-center">
-                                        <a class="small" href="forgot-password.php">Forgot Password?</a>
+                                        <a class="small" href="faculty_forgot_password.php">Forgot Password?</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="login.php">Student Login</a>
+                                        &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a class="small" href="admin_login.php">Admin Login</a>
                                     </div>
                                 </div>
                             </div>

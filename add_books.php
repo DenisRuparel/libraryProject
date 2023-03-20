@@ -19,6 +19,7 @@ if(isset($_POST['savebtn'])){
   $publication = $_POST['publication'];
   $purchase_date = $_POST['purchase_date'];
   $edition = $_POST['edition'];
+  $semester = $_POST['semester'];
   $availability = 'available';
 
   $bookid_query = "SELECT * FROM books WHERE book_id='$book_id' ";
@@ -28,12 +29,11 @@ if(isset($_POST['savebtn'])){
   }
 
   if(count($errors) === 0){
-      $query = "INSERT INTO books(book_id, book_title, catagory, author_name, price, publication, purchase_date, edition, availability) VALUES ('$book_id','$book_title','$catagory','$author_name','$price','$publication','$purchase_date','$edition','$availability')";
+      $query = "INSERT INTO books(book_id, book_title, catagory, author_name, price, publication, purchase_date, edition, semester, availability) VALUES ('$book_id','$book_title','$catagory','$author_name','$price','$publication','$purchase_date','$edition','$semester','$availability')";
       $query_run = mysqli_query($connection, $query);
       
       if($query_run){
           $success['addbook'] = "Book Added Successsfully!";
-          $_SESSION['b_id'] = $book_id;
           // $_SESSION['book_title'] = $book_title;
       }
       else{
@@ -88,6 +88,10 @@ if(isset($_POST['savebtn'])){
                 <label>Edition</label>
                 <input type="number" name="edition" maxlength="4" class="form-control" placeholder="Enter Book's Edition" required>
             </div>
+            <div class="form-group">
+                <label>Semester</label>
+                <input type="number" name="semester" pattern="[0-8]{1}" class="form-control" placeholder="Enter Book's Semester" required>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -97,7 +101,67 @@ if(isset($_POST['savebtn'])){
     </div>
   </div>
 </div>
+<?php
+require 'vendor/autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+  if (isset($_POST['import_file_btn'])) {
+      $allowed_extension = ['xls', 'csv', 'xlsx'];
+      $filename = $_FILES['import_file']['name'];
+      $checking = explode(".", $filename);
+      $file_ext = end($checking);
+
+      if (in_array($file_ext, $allowed_extension)) {
+        $targetPath = $_FILES['import_file']['tmp_name'];
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($targetPath);
+        $data = $spreadsheet->getActiveSheet()->toArray();
+  
+        foreach($data as $row){
+          $bookid = $row['0'];
+          $booktitle = $row['1'];
+          $bookcatagory = $row['2'];
+          $bookauthorname = $row['3'];
+          $bookprice = $row['4'];
+          $bookpublication = $row['5'];
+          $bookpurchasedate = $row['6'];
+          $bookedition = $row['7'];
+          $booksemester = $row['8'];
+          $bookavailability = $row['9'];
+          $bookupdatedon = $row['10'];
+
+          $checkbook = "SELECT * FROM books WHERE book_id = '$bookid'";
+          $checkbook_run = mysqli_query($connection, $checkbook);
+
+          if (mysqli_num_rows($checkbook_run) > 0) {
+            $update_query = "UPDATE books SET book_title='$booktitle',catagory='$bookcatagory',author_name='$bookauthorname',price='$bookprice',publication='$bookpublication',purchase_date='$bookpurchasedate',edition='$bookedition',semester='$booksemester',availability='$bookavailability', book_updated_on='$bookupdatedon' WHERE book_id = '$bookid'";
+
+            $update_query_run = mysqli_query($connection, $update_query);
+
+          }
+          else {
+            $insert_query = "INSERT INTO books(book_id, book_title, catagory, author_name, price, publication, purchase_date,edition, semester, availability, book_updated_on) VALUES ('$bookid','$booktitle','$bookcatagory','$bookauthorname','$bookprice','$bookpublication','$bookpurchasedate','$bookedition','$booksemester','$bookavailability', $bookupdatedon)";
+
+            $insert_query_run = mysqli_query($connection, $insert_query);
+
+            $success['importbook'] = "File Imported Successsfully!";
+          }
+        }
+        // if (isset($msg)) {
+        //   $success['importbook'] = "File Imported Successsfully!";
+        //   echo "<script>window.location.href='add_books.php';</script>";
+        // }
+        // else{
+        //   $errors['imp-error'] = "Invalid File!";
+        //   echo "<script>window.location.href='add_books.php';</script>";
+        // }
+      }
+    else{
+      $errors['ext-error'] = "File Imported Failed!";
+      echo "<script>window.location.href='add_books.php';</script>";
+    }
+  }
+?>
 
 <div class="container-fluid">
 
@@ -109,6 +173,13 @@ if(isset($_POST['savebtn'])){
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
               Add
             </button>
+            <form action="add_books.php" method="POST" enctype="multipart/form-data">
+                <input type="file" accept=".xls, .csv, .xlsx" name="import_file" class="uploadlabel d-sm-inline-block shadow-sm" required>
+                    <button type="submit" name="import_file_btn" class="btn btn-primary uploadbutton d-sm-inline-block btn shadow-sm">
+                      <i class="fas fa-upload" aria-hidden="true"></i>
+                      Upload Excel File
+                    </button>
+            </form>
             <?php
               if(isset($_SESSION['success']) && $_SESSION['success'] != ''){
                   // echo '<h4 class="bg-primary"> '.$_SESSION['success'].' </h4>';
@@ -197,6 +268,7 @@ if(isset($_POST['savebtn'])){
             <th> Publication </th>
             <th> Purchase Date </th>
             <th> Edition </th>
+            <th> Semester </th>
             <th> Availability </th>
             <th>EDIT </th>
             <th>DELETE </th>
@@ -225,6 +297,7 @@ if(isset($_POST['savebtn'])){
             <td><?php  echo $row['publication']; ?></td>
             <td><?php  echo $row['purchase_date']; ?></td>
             <td><?php  echo $row['edition']; ?></td>
+            <td><?php  echo $row['semester']; ?></td>
             <td><?php  echo $availabel; ?></td>
               <td>
                   <form action="modify_book.php" method="post">
@@ -242,9 +315,9 @@ if(isset($_POST['savebtn'])){
           <?php
           } 
         }
-        else{
-          echo "No Record Found";
-        }
+        // else{
+        //   echo "No Record Found";
+        // }
           ?>
         </tbody>
       </table>

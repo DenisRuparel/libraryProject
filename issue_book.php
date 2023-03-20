@@ -501,6 +501,17 @@ else{
 						if($status == 'Return'){
 							$status = '<h5><span class="badge badge-warning">Return</span></h5>';
 						}
+
+            $issue_date = $row['issue_date_time'];
+
+            $cur_date = date('Y-m-d H:i:s');
+
+            $days = strtotime($cur_date)-strtotime($issue_date);
+
+            // $fine = get_one_day_fines($connection);
+
+            // echo "difference in ".$days/(24*60*60)." days";
+
           ?>
             <tr>
             <td><?php  echo $row['book_id']; ?></td>
@@ -508,7 +519,7 @@ else{
             <td><?php  echo $row['issue_date_time']; ?></td>
             <td><?php  echo $row['expected_return_date']; ?></td>
             <td><?php  echo $status; ?></td>
-            <td><?php  echo "hello" ?></td>
+            <td><?php  echo floor($days/(24*60*60)); ?></td>
             <td>
             <?php
               echo'

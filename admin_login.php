@@ -47,7 +47,7 @@ if(isset($_POST['signinbtn'])){
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Login here!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Admin Login</h1>
                                         <p class="text-center">Login with your user id and password!
                                         </p>
                                             <?php
@@ -81,7 +81,9 @@ if(isset($_POST['signinbtn'])){
                                         <a class="small" href="forgot-password.php">Forgot Password?</a>
                                     </div>
                                     <div class="text-center">
-                                        <a class="small" href="admin_register.php">New User? Create an Account!</a>
+                                        <a class="small" href="login.php">Student Login</a>
+                                        &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a class="small" href="faculty_login.php">Faculty Login</a>
                                     </div>
                                 </div>
                             </div>

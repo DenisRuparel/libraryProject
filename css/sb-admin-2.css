@@ -41,6 +41,24 @@
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+input[type="file"]{
+  display: none;
+}
+.uploadlabel{
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-right: 200px;
+  margin-top: 25px;
+}
+.uploadbutton{
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
 *,
 *::before,
 *::after {

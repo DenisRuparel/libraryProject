@@ -24,7 +24,7 @@
   <hr class="sidebar-divider my-0">
 
   <!-- Nav Item - Dashboard -->
-  <li class="nav-item active">
+  <li class="nav-item">
     <a class="nav-link" href="home.php">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span></a>
@@ -151,18 +151,18 @@
   </li>
 
   <!-- Nav Item - Charts -->
-  <li class="nav-item">
+  <!-- <li class="nav-item">
     <a class="nav-link collapsed" href="charts.html">
       <i class="fa fa-thumbs-down"></i>
       <span>Not Return Books</span></a>
-  </li>
+  </li> -->
 
   <!-- Nav Item - Tables -->
-  <li class="nav-item">
+  <!-- <li class="nav-item">
     <a class="nav-link collapsed" href="charts.html">
       <i class="fas fa-rupee-sign"></i>
       <span>Collect Fines</span></a>
-  </li>
+  </li> -->
 
   <!-- Nav Item - Tables -->
   <li class="nav-item">
@@ -205,7 +205,7 @@
       </button>
 
       <!-- Topbar Search -->
-      <form action="" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+      <!-- <form action="" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
         method="GET">
         <div class="input-group">
           <input type="text" name="search" required class="form-control bg-light border-0 small"
@@ -216,7 +216,7 @@
             </button>
           </div>
         </div>
-      </form>
+      </form> -->
 
 
       <!-- Topbar Navbar -->
@@ -419,10 +419,10 @@
               <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
               Settings
             </a>
-            <a class="dropdown-item" href="#">
+            <!-- <a class="dropdown-item" href="#">
               <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
               Activity Log
-            </a>
+            </a> -->
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
               <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

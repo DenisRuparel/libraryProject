@@ -14,7 +14,6 @@ if (!isset($_SESSION["user_name"])) {
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">Show Books: </h6>
   </div>
-</div>
 
   <div class="card-body">
 
@@ -30,6 +29,7 @@ if (!isset($_SESSION["user_name"])) {
             <th> Publication </th>
             <th> Purchase Date </th>
             <th> Edition </th>
+            <th> Semester </th>
             <th> Availability </th>
           </tr>
         </thead>
@@ -56,6 +56,7 @@ if (!isset($_SESSION["user_name"])) {
             <td><?php  echo $row['publication']; ?></td>
             <td><?php  echo $row['purchase_date']; ?></td>
             <td><?php  echo $row['edition']; ?></td>
+            <td><?php  echo $row['semester']; ?></td>
             <td><?php  echo $availabel; ?></td>
             </tr>
           <?php
@@ -71,7 +72,7 @@ if (!isset($_SESSION["user_name"])) {
     </div>
   </div>
 </div>
-
+</div>
 </div>
 <!-- /.container-fluid -->
 

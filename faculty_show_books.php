@@ -2,6 +2,7 @@
 include('faculties/header.php'); 
 include('faculties/navbar.php'); 
 include('security.php'); 
+error_reporting(0);
 if (!isset($_SESSION["username"])) {
   header("location:faculty_login.php");
 } 
@@ -30,6 +31,7 @@ if (!isset($_SESSION["username"])) {
             <th> Publication </th>
             <th> Purchase Date </th>
             <th> Edition </th>
+            <th> Semester </th>
             <th> Availability </th>
           </tr>
         </thead>
@@ -56,6 +58,7 @@ if (!isset($_SESSION["username"])) {
             <td><?php  echo $row['publication']; ?></td>
             <td><?php  echo $row['purchase_date']; ?></td>
             <td><?php  echo $row['edition']; ?></td>
+            <td><?php  echo $row['semester']; ?></td>
             <td><?php  echo $availabel; ?></td>
             </tr>
           <?php

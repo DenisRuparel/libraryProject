@@ -13,6 +13,9 @@ if (!isset($_SESSION["uid"])) {
 <div class="card shadow mb-4">
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">Show Students: </h6>
+  </div>
+    
+    
     <?php
               if(isset($_SESSION['success']) && $_SESSION['success'] != ''){
                   // echo '<h4 class="bg-primary"> '.$_SESSION['success'].' </h4>';
@@ -36,8 +39,7 @@ if (!isset($_SESSION["uid"])) {
                   unset($_SESSION['status']);
               }
             ?>
-  </div>
-</div>
+
 
   <div class="card-body">
 
@@ -50,7 +52,6 @@ if (!isset($_SESSION["uid"])) {
             <th> Last Name </th>
             <th> Email </th>
             <th> Contact </th>
-            <th> Password </th>
             <th> Registration Date </th>
             <th>DELETE </th>
           </tr>
@@ -68,7 +69,6 @@ if (!isset($_SESSION["uid"])) {
             <td><?php  echo $row['last_name']; ?></td>
             <td><?php  echo $row['email']; ?></td>
             <td><?php  echo $row['contact']; ?></td>
-            <td><?php  echo $row['password']; ?></td>
             <td><?php  echo $row['date']; ?></td>
               <td>
                   <form action="modify_students.php" method="post">
@@ -90,11 +90,12 @@ if (!isset($_SESSION["uid"])) {
     </div>
   </div>
 </div>
-
+</div>
+</div>
 </div>
 <!-- /.container-fluid -->
 
 <?php
 // include('admin/scripts.php');
-include('admin/footer.php');
+// include('admin/footer.php');
 ?>

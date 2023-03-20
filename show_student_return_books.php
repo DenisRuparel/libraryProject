@@ -14,7 +14,7 @@ if (!isset($_SESSION["user_name"])) {
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">Your Returned Books: </h6>
   </div>
-</div>
+
 
   <div class="card-body">
 
@@ -74,7 +74,7 @@ if (!isset($_SESSION["user_name"])) {
     </div>
   </div>
 </div>
-
+</div>
 </div>
 <!-- /.container-fluid -->
 

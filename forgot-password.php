@@ -9,6 +9,7 @@ use PHPMailer\PHPMailer\SMTP;
 <?php
 //email system start for forget password
 include('security.php');    
+$errors=array();
     $mail="";
     if(isset($_POST['rstbtn'])){
         $f_mail=  ($_POST['email']);
@@ -19,32 +20,37 @@ include('security.php');
                 $results = mysqli_query($connection, $sql);
                 $q=  mysqli_affected_rows($connection);
                 if($q<1){
-                    echo'<div class="alert alert-danger absolue center text-center" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                                <span class="text-danger">E-mail addresses did not match!</span>
-                        </div>';
+                    // echo'<div class="alert alert-danger absolue center text-center" role="alert">
+                    //         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    //             <span aria-hidden="true">×</span>
+                    //         </button>
+                    //             <span class="text-danger">E-mail addresses did not match!</span>
+                    //     </div>';
+                    $errors['not-match-email'] = 'E-mail addresses did not match!'; 
                 }
                 else 
                 if($q > 1){
-                    echo'<div class="alert alert-danger absolue center text-center" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                                <span class="text-danger">Duplicate e-mail address found!</span>
-                        </div>';
+                    // echo'<div class="alert alert-danger absolue center text-center" role="alert">
+                    //         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    //             <span aria-hidden="true">×</span>
+                    //         </button>
+                    //             <span class="text-danger">Duplicate e-mail address found!</span>
+                    //     </div>';
+                    $errors['dup-email'] = 'Duplicate e-mail address found!'; 
                 }
                 else 
                     if($q == 1){
                         $res=mysqli_fetch_array($results);
                         
-                        $id=$res['enrollment_number'];
+                        // $id=$res['enrollment_number'];
                         
-                        $rid= md5(uniqid(rand(),true));
+                        // $rid= md5(uniqid(rand(),true));
                         
-                        $key=md5($rid);
-                        $sql=("UPDATE register SET activation='$key' where enrollment_number='$id' ") or die (mysql_error());
+                        // $key=md5($rid);
+
+                        // $key .= $rid;
+                        
+                        // $sql=("UPDATE register SET activation='$key' where enrollment_number='$id' ") or die (mysql_error());
                         
                         $email=base64_encode($f_mail);
                         
@@ -93,32 +99,34 @@ include('security.php');
                             
                         }
                         else{
-                            echo'<div class="alert alert-danger absolue center text-center" role="alert">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                        <span class="text-danger">Error occured while trying to send e-mail</span>
-                                </div>';
+                            // echo'<div class="alert alert-danger absolue center text-center" role="alert">
+                            //         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            //             <span aria-hidden="true">×</span>
+                            //         </button>
+                            //             <span class="text-danger">Error occured while trying to send e-mail</span>
+                            //     </div>';
+                            $errors['err-occur'] = 'Error occured while trying to send e-mail!';
                         }
                     }          
+            }
+            else {
+                // echo'<div class="alert alert-danger absolue center text-center" role="alert">
+                //         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                //             <span aria-hidden="true">×</span>
+                //         </button>
+                //             <span class="text-danger">Invalid Format!</span>
+                //     </div>';
+                $errors['invalid-format'] = 'Invalid Format!';
+            }
         }
-        else {
-            echo'<div class="alert alert-danger absolue center text-center" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                        <span class="text-danger">Invalid Format!</span>
-                </div>';
-        }
-        }
-        else {
-                echo'<div class="alert alert-danger absolue center text-center" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                        <span class="text-danger">Enter your e-mail!</span>
-                </div>';
-        }
+        // else {
+        //         echo'<div class="alert alert-danger absolue center text-center" role="alert">
+        //             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        //                 <span aria-hidden="true">×</span>
+        //             </button>
+        //                 <span class="text-danger">Enter your e-mail!</span>
+        //         </div>';
+        // }
     }
 ?>
 <body class="bg-gradient-primary">
@@ -154,10 +162,41 @@ include('security.php');
                                             unset($_SESSION['new']); 
                                         }
                                     ?>
+                                    <?php
+                                        if(count($errors) == 1){
+                                            ?>
+                                            <div class="alert alert-danger text-center">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                            </button>
+                                                <?php
+                                                foreach($errors as $showerror){
+                                                    echo $showerror;
+                                                }
+                                                ?>
+                                            </div>
+                                            <?php
+                                        }elseif(count($errors) > 1){
+                                            ?>
+                                            <div class="alert alert-danger">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                            </button>
+                                                <?php
+                                                foreach($errors as $showerror){
+                                                    ?>
+                                                    <li><?php echo $showerror; ?></li>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </div>
+                                            <?php
+                                        }
+                                    ?>
                                         <div class="form-group">
                                             <input type="email" name="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                                placeholder="Enter Email Address..." required>
                                         </div>
                                         <button type="submit" name="rstbtn" class="btn btn-primary btn-user btn-block"> Reset Password </button>
                                     </form>

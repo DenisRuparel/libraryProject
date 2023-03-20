@@ -3,17 +3,17 @@ include('security.php');
 include('database/dbconfig.php');
 // session_start();
     
-    // function get_one_day_fines($connection){
-    //     $output = 0;
-    //     $query = "SELECT library_one_day_fine FROM settings 
-    //     LIMIT 1";
-    //     // $result = $connection->query($query);
-    //     $result = mysqli_query($connection, $query);
-    //     foreach($result as $row){
-    //         $output = $row["library_one_day_fine"];
-    //     }
-    //     return $output;
-    // }
+    function get_one_day_fines($connection){
+        $output = 0;
+        $query = "SELECT library_one_day_fine FROM settings 
+        LIMIT 1";
+        // $result = $connection->query($query);
+        $result = mysqli_query($connection, $query);
+        foreach($result as $row){
+            $output = $row["library_one_day_fine"];
+        }
+        return $output;
+    }
 
     function get_book_issue_limit_per_user($connection){
         $output = '';

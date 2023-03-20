@@ -28,14 +28,37 @@ if (!isset($_SESSION["uid"])) {
   
 
   <!-- Page Heading -->
-  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
     <a href="home.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
         class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-  </div>
+  </div> -->
 
   <!-- Content Row -->
   <div class="row">
+  <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Requests</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+              <?php
+                  require 'database/dbconfig.php';
+                  $query = "SELECT enrollment_number FROM requests ORDER BY enrollment_number";  
+                  $query_run = mysqli_query($connection, $query);
+                  $row = mysqli_num_rows($query_run);
+                  echo '<h4> Total Requests: '.$row.'</h4>';
+                ?>
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-bell fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Earnings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
@@ -43,7 +66,7 @@ if (!isset($_SESSION["uid"])) {
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Registered Students</div>
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Students</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
 
                <?php
@@ -70,19 +93,19 @@ if (!isset($_SESSION["uid"])) {
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Books</div>
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Faculty</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
               <?php
                   require 'database/dbconfig.php';
-                  $query = "SELECT book_id FROM books ORDER BY book_id";  
+                  $query = "SELECT f_id FROM faculties ORDER BY f_id";  
                   $query_run = mysqli_query($connection, $query);
                   $row = mysqli_num_rows($query_run);
-                  echo '<h4> Total Books: '.$row.'</h4>';
+                  echo '<h4> Total Faculties: '.$row.'</h4>';
                 ?>
               </div>
             </div>
             <div class="col-auto">
-              <i class="fa fa-book fa-2x text-gray-300"></i>
+              <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
             </div>
           </div>
         </div>
@@ -115,33 +138,26 @@ if (!isset($_SESSION["uid"])) {
         </div>
       </div>
     </div> -->
-    <div class="col-xl-3 col-md-6 mb-4">
-      <div class="card border-left-warning shadow h-100 py-2">
-        <div class="card-body">
-          <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Issued/Return Books</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">115</div>
-            </div>
-            <div class="col-auto">
-              <i class="fas fa-book fa-2x text-gray-300"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    
     <!-- Pending Requests Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-danger shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Collected Fines</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">1825</div>
+              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Total Books</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+              <?php
+                  require 'database/dbconfig.php';
+                  $query = "SELECT book_id FROM books ORDER BY book_id";  
+                  $query_run = mysqli_query($connection, $query);
+                  $row = mysqli_num_rows($query_run);
+                  echo '<h4> Total Books: '.$row.'</h4>';
+                ?>
+              </div>
             </div>
             <div class="col-auto">
-              <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
+              <i class="fas fa-book fa-2x text-gray-300"></i>
             </div>
           </div>
         </div>
