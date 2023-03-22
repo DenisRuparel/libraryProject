@@ -12,7 +12,7 @@ if (!isset($_SESSION["user_name"])) {
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Your issued Books: </h6>
+    <h6 class="m-0 font-weight-bold text-primary">Your Issued Books: </h6>
   </div>
 
 
@@ -27,6 +27,7 @@ if (!isset($_SESSION["user_name"])) {
             <th> Book Issue Date</th>
             <th> Book Return Date</th>
             <th> Book Status</th>
+            <th> Days</th>
           </tr>
         </thead>
         <tbody>
@@ -53,6 +54,11 @@ if (!isset($_SESSION["user_name"])) {
               if($status == 'Return'){
                 $status = '<h5><span class="badge badge-warning">Return</span></h5>';
               }
+              $issue_date = $row['issue_date_time'];
+
+              $cur_date = date('Y-m-d H:i:s');
+
+              $days = strtotime($cur_date)-strtotime($issue_date);
             ?>
               <tr>
               <td><?php  echo $row['book_id']; ?></td>
@@ -60,13 +66,14 @@ if (!isset($_SESSION["user_name"])) {
               <td><?php  echo $row['issue_date_time']; ?></td>
               <td><?php  echo $row['expected_return_date']; ?></td>
               <td><?php  echo $status; ?></td>
+              <td><?php  echo floor($days/(24*60*60)); ?></td>
               </tr>
             <?php
             } 
           }
-          else{
-            echo "No Record Found";
-          }
+          // else{
+          //   echo "No Record Found";
+          // }
           ?>
         </tbody>
       </table>

@@ -19,13 +19,14 @@ if(isset($_POST['edit_setting'])){
 	
 
 	$query = "UPDATE settings SET library_admin = '$library_admin',library_contact = '$library_contact',library_email = '$library_email',library_total_book_issue_day = '$library_total_book_issue_day',library_one_day_fine = '$library_one_day_fine',library_issue_total_book_per_user = '$library_issue_total_book_per_user' WHERE 1";
-	// $statement = $connection->prepare($query);
 
-	// $statement->execute($data);
+  $query_run = mysqli_query($connection, $query); 
 
-    $query_run = mysqli_query($connection, $query);
+  $admin_query = "UPDATE admin SET first_name = '$library_admin',contact = '$library_contact',email = '$library_email' WHERE 1";
 
-	if($query_run){
+  $admin_query_run = mysqli_query($connection, $admin_query);
+
+	if($query_run || $admin_query_run){
         $success['update'] = "Data Updated Successsfully!";
     }
     else{

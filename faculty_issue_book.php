@@ -37,34 +37,51 @@ if(isset($_POST["issue_book_button"])){
         foreach($query_run as $book_row){
         
           if($book_row['availability'] == 'Available'){
-        
-            $book_issue_limit = get_book_issue_limit_per_user($connection);
 
-            $total_book_issue = get_total_book_issue_per_user($connection, $user_id);
+            $user_query = "SELECT * FROM faculties WHERE f_id = '$user_id'";
 
-            if($total_book_issue < $book_issue_limit){
-              $total_book_issue_day = get_total_book_issue_day($connection);
+            $user_query_run= mysqli_query($connection, $user_query);
 
-              $today_date = get_date_time($connection);
+            if(mysqli_num_rows($user_query_run) > 0){
+              foreach($user_query_run as $user_row){
 
-              $expected_return_date = date('Y-m-d H:i:s', strtotime($today_date. ' + '.$total_book_issue_day.' days'));
+                if ($user_row['f_id'] == $user_id) {
+                  $book_issue_limit = get_book_issue_limit_per_user($connection);
 
-              $insert_query = "INSERT INTO f_issue_book 
-                              (book_id, user_id, issue_date_time, expected_return_date, return_date_time, book_fines, book_issue_status) 
-                              VALUES ('$book_id', '$user_id', '$today_date', '$expected_return_date', '', '0 Rs.', 'Issue')";
+                  $total_book_issue = get_total_book_issue_per_user($connection, $user_id);
 
-                              $insert_query_run = mysqli_query($connection, $insert_query);
+                  if($total_book_issue < $book_issue_limit){
+                    $total_book_issue_day = get_total_book_issue_day($connection);
 
-                              $update_query = "UPDATE books SET availability = 'Not Available', 
-                                              book_updated_on = '$today_date' WHERE book_id = '$book_id'";
+                    $today_date = get_date_time($connection);
 
-                              $update_query_run = mysqli_query($connection, $update_query);
+                    $expected_return_date = date('Y-m-d H:i:s', strtotime($today_date. ' + '.$total_book_issue_day.' days'));
 
-                              echo "<script>window.location.href='faculty_issue_book.php?msg=add';</script>";
+                    $insert_query = "INSERT INTO f_issue_book 
+                                    (book_id, user_id, issue_date_time, expected_return_date, return_date_time, book_issue_status) 
+                                    VALUES ('$book_id', '$user_id', '$today_date', '$expected_return_date', '', 'Issue')";
+
+                                    $insert_query_run = mysqli_query($connection, $insert_query);
+
+                                    $update_query = "UPDATE books SET availability = 'Not Available', 
+                                                    book_updated_on = '$today_date' WHERE book_id = '$book_id'";
+
+                                    $update_query_run = mysqli_query($connection, $update_query);
+
+                                    echo "<script>window.location.href='faculty_issue_book.php?msg=add';</script>";
+                  }
+                  else{
+                    $errors .= 'User has already reached Book Issue Limit, First return pending book!';
+                  }
+                }
+                else {
+                  $errors .= 'User not Registered!';
+                }
               }
-              else{
-                $errors .= 'User has already reached Book Issue Limit, First return pending book!';
-              }
+            }
+            else{
+              $errors .= 'User not Found!';
+            }
           }
           else{
             $errors .= 'Book not Available!';
@@ -472,8 +489,9 @@ else{
             <th> Book ID </th>
             <th> User ID </th>
             <th> Book Issue Date</th>
-            <th> Book Return Date</th>
+            <th> Book Expected Return Date</th>
             <th> Book Status</th>
+            <th> Issue Days</th>
             <th> Action</th>
           </tr>
         </thead>
@@ -496,6 +514,12 @@ else{
 						if($status == 'Return'){
 							$status = '<h5><span class="badge badge-warning">Return</span></h5>';
 						}
+
+            $issue_date = $row['issue_date_time'];
+
+            $cur_date = date('Y-m-d H:i:s');
+
+            $days = strtotime($cur_date)-strtotime($issue_date);
           ?>
             <tr>
             <td><?php  echo $row['book_id']; ?></td>
@@ -503,6 +527,7 @@ else{
             <td><?php  echo $row['issue_date_time']; ?></td>
             <td><?php  echo $row['expected_return_date']; ?></td>
             <td><?php  echo $status; ?></td>
+            <td><?php  echo floor($days/(24*60*60)); ?></td>
             <td>
             <?php
               echo'

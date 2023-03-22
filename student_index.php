@@ -1,10 +1,9 @@
 <?php
 include('security.php');
-include('faculties/header.php'); 
-include('faculties/navbar.php');
-
-if (!isset($_SESSION["userid"])) {
-  header("location:faculty_login.php");
+include('includes/header.php'); 
+include('includes/navbar.php'); 
+if (!isset($_SESSION["user_name"])) {
+  header("location:login.php");
 } 
 ?>
 
@@ -17,7 +16,7 @@ if (!isset($_SESSION["userid"])) {
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">×</span>
       </button>
-        <span class="text-success">Hello! '.$_SESSION['userid'].' Now You are logged in!</span>
+        <span class="text-success">Hello! '.$_SESSION['user_name'].' Now You are logged in!</span>
       </div>';
     unset($_SESSION['success']); 
    }
@@ -68,7 +67,7 @@ if (!isset($_SESSION["userid"])) {
               <div class="h5 mb-0 font-weight-bold text-gray-800">
               <?php
                   require 'database/dbconfig.php';
-                  $query = "SELECT book_id FROM f_issue_book WHERE book_issue_status = 'Issue' AND user_id = '".$_SESSION['userid']."' ORDER BY book_id";  
+                  $query = "SELECT book_id FROM issue_book WHERE book_issue_status = 'Issue' AND user_id = '".$_SESSION['user_name']."' ORDER BY book_id";  
                   $query_run = mysqli_query($connection, $query);
                   $row = mysqli_num_rows($query_run);
                   echo '<h4> Issued: '.$row.'</h4>';
@@ -93,7 +92,7 @@ if (!isset($_SESSION["userid"])) {
               <div class="h5 mb-0 font-weight-bold text-gray-800">
               <?php
                   require 'database/dbconfig.php';
-                  $query = "SELECT book_id FROM f_issue_book WHERE book_issue_status = 'Return' AND user_id = '".$_SESSION['userid']."' ORDER BY book_id";  
+                  $query = "SELECT book_id FROM issue_book WHERE book_issue_status = 'Return' AND user_id = '".$_SESSION['user_name']."' ORDER BY book_id";  
                   $query_run = mysqli_query($connection, $query);
                   $row = mysqli_num_rows($query_run);
                   echo '<h4> Returned: '.$row.'</h4>';
@@ -116,7 +115,41 @@ if (!isset($_SESSION["userid"])) {
               <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Late Returned Books</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
               <?php
-                  // echo '<h4> Late Returned: '.$row.'</h4>';
+                  // require 'database/dbconfig.php';
+                  // // $query = "SELECT book_id FROM issue_book WHERE book_issue_status = 'Late Return' AND user_id = '".$_SESSION['user_name']."' ORDER BY book_id";  
+                  // $query = "SELECT * FROM issue_book WHERE book_issue_status = 'Return'"; 
+                  
+                  // $query_run = mysqli_query($connection, $query);
+
+                  // if(mysqli_num_rows($query_run) > 0){
+                  //   while($row = mysqli_fetch_assoc($query_run)){
+                  //     $issue_date = $row['issue_date_time'];
+
+                  //     $cur_date = $row['return_date_time'];
+
+                  //     $days = strtotime($cur_date)-strtotime($issue_date); 
+
+                  //     $expected_date = $row['expected_return_date']; 
+
+                  //     $res = strtotime($expected_date)-strtotime($issue_date); 
+
+                  //     $fine = null;
+
+                  //     if ($days <= $res) {
+                  //       // $status = '<h5><span class="badge badge-warning">Return</span></h5>';
+                  //     }
+                  //     else {
+                  //       $late = strtotime($cur_date)-strtotime($expected_date); 
+                                
+                  //       $status = floor($late/(24*60*60));
+
+                  //       // $fine_func = get_one_day_fines($connection);
+
+                  //       // $fine = floor($late/(24*60*60)) * $fine_func;
+                  //     }
+                  //   }
+                  // }
+                  // echo '<h4> Late Returned: '.$status.'</h4>';
                 ?>
               </div>
             </div>
@@ -129,6 +162,7 @@ if (!isset($_SESSION["userid"])) {
     </div>
   </div>
   </div>
+  
 
   <!-- Content Row -->
 

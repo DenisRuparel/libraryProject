@@ -30,7 +30,7 @@ if(isset($_POST['login_btn'])){
                 $_SESSION['name'] = $fname;
                 $_SESSION['password'] = $password_login;
                 $_SESSION['avatar'] = $avatar;
-                header('location: index.php');
+                header('location: student_index.php');
             }
         }
     }
