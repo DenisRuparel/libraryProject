@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('security.php');
-include('faculties/header.php');
+include('admin/header.php');
 require "Send_Mail/autoload.php";
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -13,10 +13,10 @@ $errors=array();
     $mail="";
     if(isset($_POST['rstbtn'])){
         $f_mail=  ($_POST['email']);
-        $_SESSION['forgot_email']=$f_mail;
+        $_SESSION['admin_email']=$f_mail;
         if($f_mail){
             if(filter_var($f_mail, FILTER_VALIDATE_EMAIL)) {
-                $sql=("select email,f_name,f_id from faculties where email='$f_mail' ") or die (mysql_error());
+                $sql=("select email,first_name,user_id from admin where email='$f_mail' ") or die (mysql_error());
                 $results = mysqli_query($connection, $sql);
                 $q=  mysqli_affected_rows($connection);
                 if($q<1){
@@ -54,14 +54,14 @@ $errors=array();
                         
                         $email=base64_encode($f_mail);
                         
-                        $name=$res['f_name'];
+                        $name=$res['first_name'];
 
                         $to = $res['email']; 
                         $mail = new PHPMailer(true);
                         $subject='Password Reset | GP Porbandar Department Library';
                         $message="Hello $name,<br> 
                                 Someone requested to reset your password.<br>
-                                If this was you,<a href='localhost/DLMS/faculty_new_password.php'>click here</a> to reset your password,
+                                If this was you,<a href='localhost/DLMS/admin_new_password.php'>click here</a> to reset your password,
 			                    
                                 if not just ignore this email.
                                 <br><br>
@@ -202,7 +202,7 @@ $errors=array();
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="faculty_login.php">Back to Login?</a>
+                                        <a class="small" href="admin_login.php">Back to Login?</a>
                                     </div>
                                 </div>
                             </div>
@@ -216,5 +216,5 @@ $errors=array();
 
     </div>
 <?php
-include('faculties/scripts.php'); 
+include('admin/scripts.php'); 
 ?>

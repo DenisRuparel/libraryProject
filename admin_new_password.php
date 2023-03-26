@@ -1,11 +1,11 @@
 <?php
 session_start();
 include('security.php');
-include('faculties/header.php');
+include('admin/header.php');
 
-$f_email = $_SESSION['forgot_email'];
-if(!isset($_SESSION["forgot_email"])){
-    header("Location: faculty_login.php");
+$f_email = $_SESSION['admin_email'];
+if(!isset($_SESSION["admin_email"])){
+    header("Location: admin_login.php");
 }
 ?>
 <?php
@@ -20,15 +20,15 @@ if(isset($_POST['newpassbtn'])){
         $errors['new-password'] = "Confirm password does not matched!";
     }
     else{
-        $remail=$_SESSION['forgot_email'];         //getting this email using session
-        $update_pass = "UPDATE faculties SET password = '$new_password' WHERE email = '$remail';";
+        $remail=$_SESSION['admin_email'];         //getting this email using session
+        $update_pass = "UPDATE admin SET password = '$new_password' WHERE email = '$remail';";
         $run_query = mysqli_query($connection, $update_pass);
         if($run_query){
             $info = "Your password changed. Now you can login with your new password!";
             $_SESSION['info'] = $info;
             // $_SESSION['status'] = "Your password changed. Now you can login with your new password!";
             // $_SESSION['status_code'] = "success";
-            header('Location: faculty_login.php');
+            header('Location: admin_login.php');
         }
         else{
             $errors['db-error'] = "Failed to change your password!";
@@ -71,7 +71,7 @@ if(isset($_POST['newpassbtn'])){
                                             <?php
                                         }
                                     ?>
-                                    <form class="user" method="POST" action="faculty_new_password.php" autocomplete="off">
+                                    <form class="user" method="POST" action="admin_new_password.php" autocomplete="off">
                                         <div class="form-group">
                                             <input type="password" name="newpassword" class="form-control form-control-user"
                                                 id="exampleInputnewpassword" aria-describedby="newpasswordHelp"
@@ -97,5 +97,5 @@ if(isset($_POST['newpassbtn'])){
 
     </div>
 <?php
-include('includes/scripts.php'); 
+include('admin/scripts.php'); 
 ?>

@@ -51,6 +51,16 @@ if(isset($_POST['signinbtn'])){
                                         <p class="text-center">Login with your user id and password!
                                         </p>
                                             <?php
+                                            if(isset($_SESSION['info']) && $_SESSION['info'] != ''){
+                                                // echo '<h4 class="bg-primary"> '.$_SESSION['success'].' </h4>';
+                                                echo '<div class="alert alert-success" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <span class="text-success">'.$_SESSION['info'].'</span>
+                                                    </div>';
+                                                unset($_SESSION['info']);
+                                            }
                                             if(count($errors) > 0){
                                                 ?>
                                                 <div class="alert alert-danger text-center">
@@ -78,7 +88,7 @@ if(isset($_POST['signinbtn'])){
                                     </form>
                                     <hr>    
                                     <div class="text-center">
-                                        <a class="small" href="forgot-password.php">Forgot Password?</a>
+                                        <a class="small" href="admin_forgot_password.php">Forgot Password?</a>
                                     </div>
                                     <div class="text-center">
                                         <a class="small" href="login.php">Student Login</a>

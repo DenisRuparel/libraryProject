@@ -59,6 +59,16 @@ if(isset($_POST['signinbtn'])){
                                         <p class="text-center">Login with your user id and password!
                                         </p>
                                             <?php
+                                            if(isset($_SESSION['info']) && $_SESSION['info'] != ''){
+                                                // echo '<h4 class="bg-primary"> '.$_SESSION['success'].' </h4>';
+                                                echo '<div class="alert alert-success" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <span class="text-success">'.$_SESSION['info'].'</span>
+                                                    </div>';
+                                                unset($_SESSION['info']);
+                                            }
                                             if(count($errors) > 0){
                                                 ?>
                                                 <div class="alert alert-danger text-center">
