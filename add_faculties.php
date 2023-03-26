@@ -3,6 +3,10 @@ include('admin/header.php');
 include('admin/navbar.php'); 
 include('security.php'); 
 include('profile_pic.php');
+if (!isset($_SESSION["uid"])) {
+  // header("location:admin_login.php");
+  header("location:index.php");
+}
 require "Send_Mail/autoload.php";
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;

@@ -116,7 +116,39 @@ if (!isset($_SESSION["userid"])) {
               <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Late Returned Books</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
               <?php
-                  // echo '<h4> Late Returned: '.$row.'</h4>';
+                  require 'database/dbconfig.php';
+                  // $query = "SELECT book_id FROM issue_book WHERE book_issue_status = 'Late Return' AND user_id = '".$_SESSION['user_name']."' ORDER BY book_id";  
+                  $query = "SELECT * FROM f_issue_book WHERE book_issue_status = 'Return' AND user_id = '".$_SESSION['userid']."'"; 
+                  
+                  $query_run = mysqli_query($connection, $query);
+
+                  if(mysqli_num_rows($query_run) > 0){
+                    while($row = mysqli_fetch_assoc($query_run)){
+
+                      static $late_counter = 0;
+
+                      $issue_date = $row['issue_date_time'];
+
+                      $cur_date = $row['return_date_time'];
+
+                      $days = strtotime($cur_date)-strtotime($issue_date); 
+
+                      $expected_date = $row['expected_return_date']; 
+
+                      $res = strtotime($expected_date)-strtotime($issue_date); 
+
+                      $fine = null;
+
+                      if($days > $res) {
+                        $late = strtotime($cur_date)-strtotime($expected_date); 
+                                
+                        $status = floor($late/(24*60*60));
+
+                        $late_counter += 1;
+                      }
+                    }
+                  }
+                  echo '<h4> Late Returned: '.$late_counter.'</h4>';
                 ?>
               </div>
             </div>

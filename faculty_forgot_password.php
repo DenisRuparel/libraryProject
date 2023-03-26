@@ -51,7 +51,7 @@ include('security.php');
 
                         // $sql=("UPDATE faculties SET activation='$key' where f_id='$id' ") or die (mysql_error());
                         
-                        $email=base64_encode($reset_email);
+                        // $email=base64_encode($reset_email);
                         
                         $name=$res['f_name'];
 

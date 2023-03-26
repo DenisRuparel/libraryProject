@@ -115,41 +115,39 @@ if (!isset($_SESSION["user_name"])) {
               <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Late Returned Books</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
               <?php
-                  // require 'database/dbconfig.php';
-                  // // $query = "SELECT book_id FROM issue_book WHERE book_issue_status = 'Late Return' AND user_id = '".$_SESSION['user_name']."' ORDER BY book_id";  
-                  // $query = "SELECT * FROM issue_book WHERE book_issue_status = 'Return'"; 
+                  require 'database/dbconfig.php';
+                  // $query = "SELECT book_id FROM issue_book WHERE book_issue_status = 'Late Return' AND user_id = '".$_SESSION['user_name']."' ORDER BY book_id";  
+                  $query = "SELECT * FROM issue_book WHERE book_issue_status = 'Return' AND user_id = '".$_SESSION['user_name']."'"; 
                   
-                  // $query_run = mysqli_query($connection, $query);
+                  $query_run = mysqli_query($connection, $query);
 
-                  // if(mysqli_num_rows($query_run) > 0){
-                  //   while($row = mysqli_fetch_assoc($query_run)){
-                  //     $issue_date = $row['issue_date_time'];
+                  if(mysqli_num_rows($query_run) > 0){
+                    while($row = mysqli_fetch_assoc($query_run)){
 
-                  //     $cur_date = $row['return_date_time'];
+                      static $late_counter = 0;
 
-                  //     $days = strtotime($cur_date)-strtotime($issue_date); 
+                      $issue_date = $row['issue_date_time'];
 
-                  //     $expected_date = $row['expected_return_date']; 
+                      $cur_date = $row['return_date_time'];
 
-                  //     $res = strtotime($expected_date)-strtotime($issue_date); 
+                      $days = strtotime($cur_date)-strtotime($issue_date); 
 
-                  //     $fine = null;
+                      $expected_date = $row['expected_return_date']; 
 
-                  //     if ($days <= $res) {
-                  //       // $status = '<h5><span class="badge badge-warning">Return</span></h5>';
-                  //     }
-                  //     else {
-                  //       $late = strtotime($cur_date)-strtotime($expected_date); 
+                      $res = strtotime($expected_date)-strtotime($issue_date); 
+
+                      $fine = null;
+
+                      if($days > $res) {
+                        $late = strtotime($cur_date)-strtotime($expected_date); 
                                 
-                  //       $status = floor($late/(24*60*60));
+                        $status = floor($late/(24*60*60));
 
-                  //       // $fine_func = get_one_day_fines($connection);
-
-                  //       // $fine = floor($late/(24*60*60)) * $fine_func;
-                  //     }
-                  //   }
-                  // }
-                  // echo '<h4> Late Returned: '.$status.'</h4>';
+                        $late_counter += 1;
+                      }
+                    }
+                  }
+                  echo '<h4> Late Returned: '.$late_counter.'</h4>';
                 ?>
               </div>
             </div>

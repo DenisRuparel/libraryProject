@@ -65,8 +65,9 @@ if (!isset($_SESSION["uid"])) {
         if ($days <= $res) {
           $status = '<h5><span class="badge badge-warning">Return</span></h5>';
         }
-        else {
+        elseif ($days > $res) {
           $late = strtotime($cur_date)-strtotime($expected_date); 
+
           $status = '<h5><span class="badge badge-danger">'.floor($late/(24*60*60)).' Day Late Return</span></h5>';
 
           $fine_func = get_one_day_fines($connection);

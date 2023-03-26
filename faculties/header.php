@@ -21,7 +21,7 @@
   <!-- for table-->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
 
-  <link rel="website icon" type="jpg" href="http://www.gppr.cteguj.in/img/aicte.png">
+  <link href="https://img.icons8.com/fluency/1x/book-shelf.png" rel="icon">
 
 </head>
 

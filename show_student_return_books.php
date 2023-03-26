@@ -58,6 +58,8 @@ if (!isset($_SESSION["user_name"])) {
                 $status = '<h5><span class="badge badge-warning">Return</span></h5>';
               }
 
+              static $late_counter = 0;
+
               $issue_date = $row['issue_date_time'];
 
                           $cur_date = $row['return_date_time'];
@@ -66,21 +68,26 @@ if (!isset($_SESSION["user_name"])) {
 
                           $expected_date = $row['expected_return_date']; 
 
-                          $res = strtotime($expected_date)-strtotime($issue_date); 
+                          $res = strtotime($expected_date) - strtotime($issue_date); 
 
                           $fine = null;
 
                           if ($days <= $res) {
                             $status = '<h5><span class="badge badge-warning">Return</span></h5>';
                           }
-                          else {
+                          elseif($days > $res) {
                             $late = strtotime($cur_date)-strtotime($expected_date); 
+
                             $status = '<h5><span class="badge badge-danger">'.floor($late/(24*60*60)).' Day Late Return</span></h5>';
 
                             $fine_func = get_one_day_fines($connection);
 
                             $fine = floor($late/(24*60*60)) * $fine_func;
+
+                            $late_counter += 1;
+                            
                           }
+                          
             ?>
               <tr>
               <td><?php  echo $row['book_id']; ?></td>
@@ -93,8 +100,10 @@ if (!isset($_SESSION["user_name"])) {
               <td><?php  echo floor($days/(24*60*60)); ?></td>
               </tr>
             <?php
+            $_SESSION['late_book_counter'] = $late_counter;
             } 
           }
+          // echo $late_counter;
           // else{
           //   echo "No Record Found";
           // }

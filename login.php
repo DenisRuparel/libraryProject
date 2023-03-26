@@ -113,11 +113,11 @@ if(isset($_POST['login_btn'])){
                                     <div class="text-center">
                                         <a class="small" href="register.php">New User? Create an Account!</a>
                                     </div>
-                                    <div class="text-center">
+                                    <!-- <div class="text-center">
                                         <a class="small" href="admin_login.php">Admin Login</a>
                                         &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
                                         <a class="small" href="faculty_login.php">Faculty Login</a>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
