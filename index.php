@@ -36,7 +36,7 @@
     <div class="container d-flex align-items-center justify-content-between ">
 
       <div class="logo">
-        <h1><a href="index.html">CE Library</a></h1>      
+        <h1><a href="index.php">CE Library</a></h1>      
       </div>
 
       <nav id="navbar" class="navbar">
@@ -195,7 +195,7 @@
           <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
             <div class="member">
               <div class="member-img">
-                <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
+                <img src="assets/img/team/nidhi.jpeg" class="img-fluid" alt="">
                 <div class="social">
                   <!-- <a href=""><i class="bi bi-twitter"></i></a> -->
                   <a href="https://www.facebook.com/nidhi.solanki.5623293"><i class="bi bi-facebook"></i></a>

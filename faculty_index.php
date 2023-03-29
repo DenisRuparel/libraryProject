@@ -121,11 +121,12 @@ if (!isset($_SESSION["userid"])) {
                   $query = "SELECT * FROM f_issue_book WHERE book_issue_status = 'Return' AND user_id = '".$_SESSION['userid']."'"; 
                   
                   $query_run = mysqli_query($connection, $query);
+                  
+                  static $late_counter = 0;
 
                   if(mysqli_num_rows($query_run) > 0){
                     while($row = mysqli_fetch_assoc($query_run)){
 
-                      static $late_counter = 0;
 
                       $issue_date = $row['issue_date_time'];
 

@@ -59,7 +59,6 @@ if (!isset($_SESSION["uid"])) {
                   unset($_SESSION['status-error']);
               }
     ?>
-  </div>
 </div>
 
   <div class="card-body">
@@ -111,7 +110,7 @@ if (!isset($_SESSION["uid"])) {
     </div>
   </div>
 </div>
-
+      </div>
 </div>
 <!-- /.container-fluid -->
 
