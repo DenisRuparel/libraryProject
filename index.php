@@ -151,7 +151,7 @@
               </div>
               <div class="member-info">
                 <h4>Vivek Vara</h4>
-                <span>Member - 1</span>
+                <span>Developer</span>
               </div>
             </div>
           </div>
@@ -169,7 +169,7 @@
               </div>
               <div class="member-info">
                 <h4>Denis Ruparel</h4>
-                <span>Member - 2</span>
+                <span>Developer</span>
               </div>
             </div>
           </div>
@@ -187,7 +187,7 @@
               </div>
               <div class="member-info">
                 <h4>Shanti Agath</h4>
-                <span>Member - 3</span>
+                <span>Developer</span>
               </div>
             </div>
           </div>
@@ -205,7 +205,7 @@
               </div>
               <div class="member-info">
                 <h4>Nidhi Solanki</h4>
-                <span>Member - 4</span>
+                <span>Developer</span>
               </div>
             </div>
           </div>
