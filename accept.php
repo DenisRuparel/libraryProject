@@ -1,6 +1,7 @@
 <?php
 session_start(); 
 include('security.php');
+error_reporting(0);
 ?>
 <?php
     $id = $_GET['id'];
@@ -19,7 +20,7 @@ include('security.php');
             $avatar = $row['user_avatar'];
             $date = $row['date'];
     
-            $insert = "INSERT INTO register(enrollment_number, first_name, last_name, email, contact, password, activation, user_avatar, date) VALUES ('$eno','$fname','$lname','$email','$contact','$password','$activation','$avatar','$date')";
+            $insert = "INSERT INTO register(enrollment_number, first_name, last_name, email, contact, password, user_avatar, date) VALUES ('$eno','$fname','$lname','$email','$contact','$password','$avatar','$date')";
             $insert_run = mysqli_query($connection, $insert);
 
             if ($insert_run) {

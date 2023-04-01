@@ -2,6 +2,7 @@
 include('admin/header.php'); 
 include('admin/navbar.php'); 
 include('security.php'); 
+error_reporting(0);
 if (!isset($_SESSION["uid"])) {
   header("location:admin_login.php");
 }
