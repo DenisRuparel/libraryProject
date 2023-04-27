@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include('admin/header.php'); 
 include('admin/navbar.php'); 
 include('security.php'); 
@@ -7,6 +8,79 @@ if (!isset($_SESSION["uid"])) {
   header("location:admin_login.php");
 } 
 ?>
+<?php
+  require 'vendor/autoload.php';
+
+  use PhpOffice\PhpSpreadsheet\Spreadsheet;
+  use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+  use PhpOffice\PhpSpreadsheet\Writer\Xls;
+  use PhpOffice\PhpSpreadsheet\Writer\Csv;
+
+  if (isset($_POST["download_file_btn"])) {
+
+    $file_ext_name = $_POST['export_file_type'];
+    $fileName = "student_return_book_sheet";
+    
+    $sql = "SELECT * FROM issue_book WHERE book_issue_status = 'Return'";
+    $result = mysqli_query($connection, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+      $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Book ID');
+        $sheet->setCellValue('B1', 'User ID');
+        $sheet->setCellValue('C1', 'Issue Date Time');
+        $sheet->setCellValue('D1', 'Expected Return Date');
+        $sheet->setCellValue('E1', 'Return Date Time');
+        $sheet->setCellValue('F1', 'Book Status');
+
+        $rowCount = 2;
+        foreach($result as $data){
+          $sheet->setCellValue('A'.$rowCount, $data['book_id']);
+          $sheet->setCellValue('B'.$rowCount, $data['user_id']);
+          $sheet->setCellValue('C'.$rowCount, $data['issue_date_time']);
+          $sheet->setCellValue('D'.$rowCount, $data['expected_return_date']);
+          $sheet->setCellValue('E'.$rowCount, $data['return_date_time']);
+          $sheet->setCellValue('F'.$rowCount, $data['book_issue_status']);
+          $rowCount++;
+        }
+        if($file_ext_name == 'xlsx'){
+            $writer = new Xlsx($spreadsheet);
+            $final_filename = $fileName.'.xlsx';
+        }
+        elseif($file_ext_name == 'xls'){
+            $writer = new Xls($spreadsheet);
+            $final_filename = $fileName.'.xls';
+        }
+        elseif($file_ext_name == 'csv'){
+            $writer = new Csv($spreadsheet);
+            $final_filename = $fileName.'.csv';
+        }
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attactment; filename="'.urlencode($final_filename).'"');
+        $writer->save($final_filename);
+
+        echo '<div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+          <span class="text-success">Report Has Been Successfully Downloaded!</span>
+        </div>';
+    }
+    else {
+      echo '<div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+          <span class="text-danger">"No Record Found!"</span>
+        </div>';
+    }
+  }
+?>
+
+
 <div class="container-fluid">
 
   <!-- DataTales Example -->
@@ -14,8 +88,20 @@ if (!isset($_SESSION["uid"])) {
     <div class="card-header py-3">
       <h6 class="m-0 font-weight-bold text-primary">Return Book Records:</h6>
     </div>
+    <form action="return_books.php" method="POST" enctype="multipart/form-data">
+                <!-- <input type="file" accept=".xls, .csv, .xlsx" name="import_file" class="uploadlabel d-sm-inline-block shadow-sm" required> -->
+                    <select name="export_file_type" class="uploadlabel d-sm-inline-block shadow-sm mt-3" required>
+                      <option value="xlsx">XLSX</option>
+                      <option value="xls">XLS</option>
+                      <option value="csv">CSV</option>
+                    </select>
+                    <button type="submit" name="download_file_btn" class="btn btn-primary uploadbutton d-sm-inline-block btn shadow-sm mt-2">
+                      <i class="fas fa-download" aria-hidden="true"></i>
+                      Download Report
+                    </button>
+            </form>
       <div class="card-body">
-
+      
         <div class="table-responsive">
           <table class="table table-bordered" id="datatableid" width="100%" cellspacing="0">
             <thead>

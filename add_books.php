@@ -267,7 +267,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
             <th> Author Name</th>
             <th> Price </th>
             <th> Publication </th>
-            <!-- <th> Purchase Date </th> -->
+            <th> Purchase Date </th>
             <th> Edition </th>
             <th> Semester </th>
             <th> Availability </th>
@@ -296,7 +296,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
             <td><?php  echo $row['author_name']; ?></td>
             <td><?php  echo $row['price']; ?></td>
             <td><?php  echo $row['publication']; ?></td>
-            <!-- <td><?php  //echo $row['purchase_date']; ?></td> -->
+            <td><?php  echo $row['purchase_date']; ?></td>
             <td><?php  echo $row['edition']; ?></td>
             <td><?php  echo $row['semester']; ?></td>
             <td><?php  echo $availabel; ?></td>
